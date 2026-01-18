@@ -23,7 +23,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
 
         const prompt = `Generate 12 unique and creative "Song Idea Packs" for a ${project.genre} (${project.subGenre}) song with a ${project.mood} mood.${keywordContext}
         Each pack must include:
-        1. A catchy English Title (with Korean translation in parentheses).
+        1. A catchy English Title with Korean translation (Format: "English Title (한글 제목)").
         2. A Topic: A 1-2 sentence description in Korean of the story or scenario.
         3. A Style: A 1-2 sentence description in Korean of the musical production, era, and vibe.
 
@@ -32,7 +32,6 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
         - Each object should have keys: "title", "topic", "style".
         - Do not include markdown code blocks or any other text.
         - Use Korean for "topic" and "style".
-        - Titles should be formatted like "Title (제목)".
         `;
 
         const response: any = await getGenAI().models.generateContent({
@@ -76,7 +75,8 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
           Mood: ${project.mood}
           Requirements:
           - Return ONLY a JSON array of 5 strings.
-          - Each string should be in the format: "English Title (한글 제목)".
+          - Each string MUST strictly follow the format: "English Title (Korean Title)".
+          - Example: "Midnight Love (한밤의 사랑)", "Blue Sky (푸른 하늘)"
           - Do not include any other text or markdown.`;
 
           const response: any = await getGenAI().models.generateContent({
@@ -137,18 +137,17 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
   };
 
   const applyThemePack = (pack: ThemePack) => {
-      // Clean title from parentheses for the main project title if needed
-      const englishTitle = pack.title.match(/^([^(]+)/)?.[1]?.trim() || pack.title;
+      // Use the full title including Korean translation
       onUpdate({
-          title: englishTitle,
+          title: pack.title,
           concept: pack.topic,
           styleDescription: pack.style
       });
   };
 
   const applySuggestedTitle = (fullTitle: string) => {
-      const englishTitle = fullTitle.match(/^([^(]+)/)?.[1]?.trim() || fullTitle;
-      onUpdate({ title: englishTitle });
+      // Use the full title including Korean translation
+      onUpdate({ title: fullTitle });
   };
 
   const applyReference = (song: string, artist: string) => {

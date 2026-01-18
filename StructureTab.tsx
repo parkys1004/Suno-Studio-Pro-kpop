@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Project, SongBlock } from './types';
 import { BLOCK_SAMPLES, STRUCTURE_TEMPLATES, INTRO_STYLES } from './constants';
 
 // --- TAB: Structure ---
 const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState('Custom');
+  // Use persisted template or default to 'Custom'
+  const selectedTemplate = project.selectedStructureTemplate || 'Custom';
 
   const moveBlock = (index: number, direction: -1 | 1) => {
      const newStructure = [...project.structure];
@@ -40,8 +41,10 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
   };
 
   const applyTemplate = (templateName: string) => {
-    setSelectedTemplate(templateName);
-    if (templateName === 'Custom') return;
+    if (templateName === 'Custom') {
+        onUpdate({ selectedStructureTemplate: 'Custom' });
+        return;
+    }
 
     // @ts-ignore
     const template = STRUCTURE_TEMPLATES[templateName];
@@ -50,7 +53,7 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
             ...block,
             id: Date.now().toString() + idx
         }));
-        onUpdate({ structure: newStructure });
+        onUpdate({ structure: newStructure, selectedStructureTemplate: templateName });
     }
   };
 
@@ -71,6 +74,17 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
                     <option key={t} value={t}>{t}</option>
                 ))}
             </select>
+            {selectedTemplate !== 'Custom' && (
+                <span style={{ 
+                    fontSize: '12px', color: '#10b981', fontWeight: 'bold', 
+                    padding: '4px 8px', backgroundColor: 'rgba(16, 185, 129, 0.1)', 
+                    borderRadius: '4px', border: '1px solid rgba(16, 185, 129, 0.2)',
+                    display: 'flex', alignItems: 'center', gap: '4px'
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>check_circle</span>
+                    현재 템플릿: {selectedTemplate}
+                </span>
+            )}
             <span style={{ fontSize: '12px', color: legibilityMode ? '#E5E7EB' : '#9ca3af' }}>* 선택 시 현재 구조가 변경됩니다.</span>
         </div>
 

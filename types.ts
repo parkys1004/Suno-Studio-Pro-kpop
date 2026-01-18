@@ -1,5 +1,6 @@
 
 
+
 export type ViewState = 'DASHBOARD' | 'STUDIO';
 export type StudioTab = 'CONCEPT' | 'STRUCTURE' | 'LYRICS' | 'SOUND' | 'ART' | 'EXPORT';
 
@@ -60,6 +61,9 @@ export interface Project {
   vocalType: string;
   djName?: string;
   introStyle?: string;
+
+  // Structure Template Persistence
+  selectedStructureTemplate?: string;
 }
 
 export interface SamplePrompt {
