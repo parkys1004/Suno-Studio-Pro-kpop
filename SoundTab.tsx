@@ -17,6 +17,9 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
   const [sunoVersion, setSunoVersion] = useState<'v3.5' | 'v5'>('v5');
   const [isDanceGuideOpen, setIsDanceGuideOpen] = useState(false);
   
+  // NEW: Prompt Style State (Structured vs Simple)
+  const [promptStyle, setPromptStyle] = useState<'structured' | 'simple'>('structured');
+  
   // Custom Instrument Preset State
   const [customInstrumentPresets, setCustomInstrumentPresets] = useState<InstrumentPreset[]>([]);
   const [newPresetName, setNewPresetName] = useState('');
@@ -193,10 +196,38 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
             }
         }
 
-        // Updated prompt construction
         const versionContext = sunoVersion === 'v5' 
-            ? "Suno v5 (Latest). Focus on natural language descriptions with specific structure." 
-            : "Suno.ai v3.5 (Standard). Focus on tags and concise descriptors.";
+            ? "Suno v5 (Latest). Focus on natural language descriptions." 
+            : "Suno.ai v3.5 (Standard).";
+
+        // Logic based on Prompt Style Selection
+        let structureInstruction = '';
+
+        if (promptStyle === 'structured') {
+            // 5-Step Structure
+            structureInstruction = `
+            STRICT REQUIREMENT: Generate the prompt adhering to the following 5-step structure logic (output as a single cohesive paragraph).
+            
+            Structure Steps:
+            1. Identity: Define vocalist gender (based on Vocal Type) and genre in exactly one sentence.
+            2. Mood: Specify tempo (${project.bpm} BPM), emotional mood, and key (${project.key}).
+            3. Instruments: List instruments (${(project.instruments || []).join(', ')}) using playing verbs (e.g., plays, provides, supports, riffs) instead of just nouns.
+            4. Performance: Describe vocal texture, delivery style, register/range, and phrasing.
+            5. Production: Describe the acoustic space, reverb amount, mix placement, and sonic characteristics (e.g., saturation, lofi, clean).
+            
+            Example of desired style: "A male K-pop singer performs an energetic track. The tempo is fast at 130 BPM in F# minor. Distorted synthesizers riff aggressively while a heavy 808 bass supports the rhythm. The vocals are powerful and breathy with tight phrasing. The production is clean with wide stereo width and modern saturation."
+            `;
+        } else {
+            // Basic Tags
+            structureInstruction = `
+            Requirement:
+            - Create a high-quality comma-separated list of tags and style descriptors.
+            - Include genre, mood, key instruments, vocal type, and production style.
+            - Add specific style adjectives (e.g., 'atmospheric', 'heavy', 'uplifting').
+            - Format: "[Tag 1], [Tag 2], [Tag 3], ..."
+            - Limit to around 200 characters max.
+            `;
+        }
 
         const prompt = `
           Construct a high-quality prompt for a music generation AI (${versionContext}).
@@ -213,23 +244,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
           ${danceInstruction}
           ${introInstruction}
 
-          ${sunoVersion === 'v5' ? `
-          STRICT REQUIREMENT: Generate the prompt adhering to the following structure logic (output as a single cohesive paragraph):
-
-          1. Identity: Define vocalist gender (based on Vocal Type) and genre in exactly one sentence.
-          2. Mood: Specify tempo (${project.bpm} BPM), emotional mood, and key (${project.key}).
-          3. Instruments: List instruments (${(project.instruments || []).join(', ')}) using playing verbs (e.g., plays, provides, supports, riffs) instead of just nouns.
-          4. Performance: Describe vocal texture, delivery style, register/range, and phrasing.
-          5. Production: Describe the acoustic space, reverb amount, mix placement, and sonic characteristics (e.g., saturation, lofi, clean).
-          
-          Example of desired style: "A male K-pop singer performs an energetic track. The tempo is fast at 130 BPM in F# minor. Distorted synthesizers riff aggressively while a heavy 808 bass supports the rhythm. The vocals are powerful and breathy with tight phrasing. The production is clean with wide stereo width and modern saturation."
-          ` : `
-          Requirement:
-          - Create a comma-separated list of tags and style descriptors.
-          - Include genre, mood, key instruments, vocal type, and production style.
-          - Format: "[Tag 1], [Tag 2], [Tag 3], ..."
-          - Limit to around 200 characters max.
-          `}
+          ${structureInstruction}
           
           Output ONLY the prompt string.
         `;
@@ -554,6 +569,41 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                   >
                     Suno v5 (Pro)
                   </button>
+              </div>
+
+              {/* NEW: Prompt Style Selector */}
+              <div>
+                  <label style={{ display: 'block', fontSize: '13px', color: labelColor, marginBottom: '8px' }}>프롬프트 스타일 (Prompt Style)</label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => setPromptStyle('structured')}
+                        style={{ 
+                            flex: 1, padding: '10px', borderRadius: '6px', 
+                            border: promptStyle === 'structured' ? '1px solid #3b82f6' : '1px solid #4b5563',
+                            backgroundColor: promptStyle === 'structured' ? 'rgba(59, 130, 246, 0.15)' : '#1f2937',
+                            color: promptStyle === 'structured' ? '#3b82f6' : '#9ca3af',
+                            fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                        }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>article</span>
+                        5단계 구조화
+                      </button>
+                      <button 
+                        onClick={() => setPromptStyle('simple')}
+                        style={{ 
+                            flex: 1, padding: '10px', borderRadius: '6px', 
+                            border: promptStyle === 'simple' ? '1px solid #fbbf24' : '1px solid #4b5563',
+                            backgroundColor: promptStyle === 'simple' ? 'rgba(251, 191, 36, 0.15)' : '#1f2937',
+                            color: promptStyle === 'simple' ? '#fbbf24' : '#9ca3af',
+                            fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
+                        }}
+                      >
+                         <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>label</span>
+                         기본 생성 (Tag)
+                      </button>
+                  </div>
               </div>
 
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
