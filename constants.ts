@@ -1,28 +1,38 @@
 
 export const GENRES = [
-  { label: 'K-Pop', subgenres: ['Girl Crush', 'Cheongryang (Refreshing)', 'High Teen', 'Dark Concept', 'Cyberpunk', 'Easy Listening'] },
+  { label: 'K-Pop', subgenres: ['Girl Crush', 'Refreshing', 'High Teen', 'Dark Concept', 'Jersey Club', 'Easy Listening', 'Afrobeats'] },
   { label: 'Ballad', subgenres: ['Traditional Ballad', 'Rock Ballad', 'R&B Ballad', 'Indie Ballad'] },
-  { label: 'Hip-Hop', subgenres: ['Trap', 'Boom Bap', 'Singing Rap', 'K-HipHop', 'Jazz Rap'] },
-  { label: 'R&B', subgenres: ['K-R&B', 'Soul', 'Groovy', 'Neo Soul'] },
+  { label: 'Hip-Hop', subgenres: ['Trap', 'Boom Bap', 'Singing Rap', 'K-HipHop', 'Jazz Rap', 'Old School'] },
+  { label: 'R&B', subgenres: ['K-R&B', 'Soul', 'Groovy', 'Neo Soul', 'Alternative R&B'] },
+  { label: 'Electronic', subgenres: ['House', 'Future Bass', 'Techno', 'Deep House', 'Hyperpop'] }, // 신설
   { label: 'Fusion', subgenres: ['Fusion Gugak', 'Joseon Pop', 'Pansori Hip-Hop', 'Folk Rock Fusion'] },
   { label: 'Trot', subgenres: ['Dance Trot', 'Traditional Trot', 'EDM Trot', 'Semi-Trot'] },
-  { label: 'Band/Rock', subgenres: ['Modern Rock', 'Punk Rock', 'Synth Rock', 'Acoustic'] },
-  { label: 'Indie/Folk', subgenres: ['Acoustic Folk', 'City Pop', 'Lo-fi'] },
-  { label: 'OST', subgenres: ['Drama OST', 'Cinematic', 'Musical Style'] },
+  { label: 'Band/Rock', subgenres: ['Modern Rock', 'Punk Rock', 'Synth Rock', 'Metal', 'Acoustic Rock'] },
+  { label: 'Indie/Folk', subgenres: ['Acoustic Folk', 'City Pop', 'Lo-fi', 'Dream Pop'] }, // 드림팝 추가
+  { label: 'Jazz/Bossa', subgenres: ['Standard Jazz', 'Bossa Nova', 'Swing', 'Fusion Jazz'] }, // 신설
+  { label: 'OST', subgenres: ['Drama OST', 'Cinematic', 'Musical Style', 'Game Music'] }, // 게임 음악 추가
+  { label: 'Healing/Meditation', subgenres: ['Piano Solo', 'Ambient', 'Nature Sounds (ASMR)', 'Meditation Guide', 'Deep Sleep Music', 'Singing Bowl'] },
   { label: 'Custom', subgenres: [] }
 ];
 
 export const MOODS = [
-  'Energetic & Powerful (신나는)',
-  'Sentimental & Sad (아련/슬픔)',
-  'Refreshing & Cool (청량한)',
-  'Dreamy & Mystical (몽환적인)',
-  'Hip & Swag (힙한)',
-  'Lovely & Sweet (사랑스러운)',
-  'Dark & Intense (강렬한)',
-  'Retro & Funky (레트로)',
-  'Chill & Relaxed (편안한)',
-  'Traditional & Han (한국적/한)'
+  { id: 'energetic', label: 'Energetic & Powerful', ko: '신나는 / 파워풀한', color: '#FF4500' },
+  { id: 'sentimental', label: 'Sentimental & Sad', ko: '아련한 / 슬픈', color: '#4682B4' },
+  { id: 'refreshing', label: 'Refreshing & Cool', ko: '청량한 / 시원한', color: '#00CED1' },
+  { id: 'dreamy', label: 'Dreamy & Mystical', ko: '몽환적인 / 신비로운', color: '#9370DB' },
+  { id: 'hip', label: 'Hip & Swag', ko: '힙한 / 스웨그 넘치는', color: '#FFD700' },
+  { id: 'lovely', label: 'Lovely & Sweet', ko: '사랑스러운 / 달콤한', color: '#FF69B4' },
+  { id: 'dark', label: 'Dark & Intense', ko: '강렬한 / 어두운', color: '#2F4F4F' },
+  { id: 'retro', label: 'Retro & Funky', ko: '레트로 / 펑키한', color: '#FF6347' },
+  { id: 'chill', label: 'Chill & Relaxed', ko: '편안한 / 여유로운', color: '#8FBC8F' },
+  { id: 'traditional', label: 'Traditional & Han', ko: '한국적 / 한이 서린', color: '#8B4513' },
+  
+  // --- 추가 추천 무드 ---
+  { id: 'grand', label: 'Grand & Epic', ko: '웅장한 / 압도적인', color: '#B8860B' },
+  { id: 'urban', label: 'Urban & Sophisticated', ko: '도시적인 / 세련된', color: '#708090' },
+  { id: 'warm', label: 'Warm & Comforting', ko: '따스한 / 위로가 되는', color: '#F4A460' },
+  { id: 'playful', label: 'Playful & Quirky', ko: '발랄한 / 장난스러운', color: '#ADFF2F' },
+  { id: 'tense', label: 'Tense & Thrilling', ko: '긴박한 / 긴장감 넘치는', color: '#8B0000' }
 ];
 
 export const INSTRUMENTS = [
@@ -449,38 +459,79 @@ export const GENRE_PRESETS: Record<string, { label: string, bpm: number, key: st
   'Ballad': [
     { label: '🎹 Traditional Ballad', bpm: 68, key: 'C', instruments: ['Grand Piano', 'Strings', 'Bass', 'Drums'] },
     { label: '🎸 Rock Ballad', bpm: 75, key: 'D', instruments: ['Electric Guitar', 'Drums', 'Bass', 'Piano'] },
-    { label: '🍂 Indie Acoustic', bpm: 80, key: 'G', instruments: ['Acoustic Guitar', 'Shaker', 'Melodica'] }
+    { label: '🍂 Indie Acoustic', bpm: 80, key: 'G', instruments: ['Acoustic Guitar', 'Shaker', 'Melodica'] },
+    { label: '🌙 R&B Ballad', bpm: 85, key: 'Bb', instruments: ['Electric Piano', 'Synth Bass', 'Soft Drums'] },
+    { label: '🎬 Cinematic Ballad (OST)', bpm: 65, key: 'F', instruments: ['Full Orchestra', 'Piano', 'Timpani'] }
   ],
   'Hip-Hop': [
-    { label: '⛓️ Trap (Show Me The Money)', bpm: 140, key: 'C#m', instruments: ['808 Bass', 'Hi-hat Rolls', 'Synth'] },
-    { label: '🎤 Singing Rap (Melodic)', bpm: 95, key: 'Am', instruments: ['Piano', 'Lofi Drums', 'Bass'] },
-    { label: '🎷 Jazz Rap', bpm: 90, key: 'Bb', instruments: ['Saxophone', 'Double Bass', 'Piano', 'Brush Drums'] }
-  ],
-  'Fusion': [
-    { label: '🇰🇷 Fusion Gugak (Leenalchi Style)', bpm: 130, key: 'Am', instruments: ['Bass', 'Drums', 'Pansori Vocals'] },
-    { label: '🏮 Joseon Pop', bpm: 100, key: 'Dm', instruments: ['Gayageum', 'Synth', 'Trap Beats'] },
-    { label: '🏯 Historical Drama Action', bpm: 145, key: 'Cm', instruments: ['Taiko Drums', 'Haegeum', 'Orchestra'] }
-  ],
-  'Trot': [
-    { label: '💃 Dance Trot', bpm: 130, key: 'Am', instruments: ['Brass', 'Synthesizer', 'Electronic Drums'] },
-    { label: '😭 Traditional Trot', bpm: 85, key: 'Dm', instruments: ['Accordion', 'Guitar', 'Violin'] },
-    { label: '⚡ EDM Trot', bpm: 135, key: 'Gm', instruments: ['Heavy Kick', 'Saw Synth', 'Brass'] }
+    { label: '⛓️ Trap (Club)', bpm: 140, key: 'C#m', instruments: ['808 Bass', 'Hi-hat Rolls', 'Synth', 'Autotune'] },
+    { label: '🎤 Singing Rap (Melodic)', bpm: 95, key: 'Am', instruments: ['Piano', 'Lofi Drums', 'Bass', 'Acoustic Guitar'] },
+    { label: '🎷 Jazz Rap', bpm: 90, key: 'Bb', instruments: ['Saxophone', 'Double Bass', 'Piano', 'Brush Drums'] },
+    { label: '🎧 Boom Bap (Old School)', bpm: 92, key: 'Fm', instruments: ['Breakbeat', 'Sampled Horns', 'Scratch', 'Bass'] },
+    { label: '💂 Drill (Grime)', bpm: 142, key: 'Gm', instruments: ['Sliding 808', 'Dark Piano', 'Snare', 'Violin'] }
   ],
   'R&B': [
-    { label: '🌙 K-R&B (Dean/Crush Style)', bpm: 90, key: 'Fm', instruments: ['Electric Piano', 'Synth Bass', 'Finger Snap'] },
-    { label: '🍷 Neo Soul', bpm: 80, key: 'Eb', instruments: ['Organ', 'Bass', 'Clean Guitar'] }
+    { label: '🌙 K-R&B (Trendy)', bpm: 90, key: 'Fm', instruments: ['Electric Piano', 'Synth Bass', 'Finger Snap'] },
+    { label: '🍷 Neo Soul (Groovy)', bpm: 80, key: 'Eb', instruments: ['Organ', 'Bass', 'Clean Guitar', 'Rimshot'] },
+    { label: '🕯️ Slow Jam (Sexy)', bpm: 70, key: 'Ab', instruments: ['Synth Pads', 'Sub Bass', 'Chimes'] },
+    { label: '🌌 Alternative R&B', bpm: 110, key: 'Bm', instruments: ['Distorted Drums', 'Atmospheric Synth', 'Reverb'] },
+    { label: '🕺 Funk R&B', bpm: 115, key: 'E', instruments: ['Slap Bass', 'Brass Section', 'Funky Guitar'] }
+  ],
+  'Electronic': [
+    { label: '🏠 House (Club)', bpm: 124, key: 'Am', instruments: ['909 Kick', 'Piano Chords', 'Hi-hats', 'Bass'] },
+    { label: '✨ Future Bass', bpm: 150, key: 'F', instruments: ['Super Saw Synth', 'Vocal Chops', '808', 'Arpeggio'] },
+    { label: '🍸 Deep House', bpm: 122, key: 'Cm', instruments: ['Sub Bass', 'Soft Pads', 'Shaker', 'Pluck Synth'] },
+    { label: '🔧 Techno (Hard)', bpm: 130, key: 'Dm', instruments: ['Industrial Kick', 'Acid Synth', 'Rumble Bass'] },
+    { label: '👾 Hyperpop', bpm: 160, key: 'G#m', instruments: ['Glitch FX', 'Distorted Bass', 'Square Wave'] }
+  ],
+  'Fusion': [
+    { label: '🇰🇷 Fusion Gugak (Leenalchi)', bpm: 130, key: 'Am', instruments: ['Bass', 'Drums', 'Pansori Vocals', 'Kwaenggwari'] },
+    { label: '🏮 Joseon Pop', bpm: 100, key: 'Dm', instruments: ['Gayageum', 'Synth', 'Trap Beats', 'Daeguem'] },
+    { label: '🏯 Historical Epic', bpm: 145, key: 'Cm', instruments: ['Taiko Drums', 'Haegeum', 'Orchestra', 'Choir'] },
+    { label: '🎸 Folk Rock Fusion', bpm: 110, key: 'G', instruments: ['Acoustic Guitar', 'Janggu', 'Piano'] },
+    { label: '🔮 Shamanic Techno', bpm: 135, key: 'Em', instruments: ['Electronic Beat', 'Piri', 'Jing', 'Throat Singing'] }
+  ],
+  'Trot': [
+    { label: '💃 Dance Trot', bpm: 130, key: 'Am', instruments: ['Brass', 'Synthesizer', 'Electronic Drums', 'Bass'] },
+    { label: '😭 Traditional Trot', bpm: 85, key: 'Dm', instruments: ['Accordion', 'Guitar', 'Violin', 'Woodblock'] },
+    { label: '⚡ EDM Trot', bpm: 135, key: 'Gm', instruments: ['Heavy Kick', 'Saw Synth', 'Brass', 'Clap'] },
+    { label: '🎸 Semi-Trot', bpm: 120, key: 'C', instruments: ['Acoustic Guitar', 'Light Percussion', 'Harmonica'] },
+    { label: '📻 Retro Trot', bpm: 125, key: 'Em', instruments: ['Organ', 'Electric Guitar', 'Double Bass'] }
   ],
   'Band/Rock': [
-    { label: '🎸 Modern Rock (Day6 Style)', bpm: 120, key: 'E', instruments: ['Electric Guitar', 'Synth', 'Bass', 'Drums'] },
-    { label: '🛹 Punk Rock', bpm: 160, key: 'A', instruments: ['Distorted Guitar', 'Fast Drums', 'Bass'] }
+    { label: '🎸 Modern Rock', bpm: 120, key: 'E', instruments: ['Electric Guitar', 'Synth', 'Bass', 'Drums'] },
+    { label: '🛹 Punk Rock', bpm: 160, key: 'A', instruments: ['Distorted Guitar', 'Fast Drums', 'Bass', 'Gang Vocals'] },
+    { label: '🎹 Synth Rock', bpm: 128, key: 'Bm', instruments: ['Synthesizer', 'Drum Machine', 'Electric Guitar'] },
+    { label: '🤘 Heavy Metal', bpm: 150, key: 'Dm', instruments: ['Distortion', 'Double Bass Drum', 'Screams'] },
+    { label: '🪵 Acoustic Rock', bpm: 100, key: 'G', instruments: ['Acoustic Guitar', 'Cajon', 'Piano', 'Bass'] }
   ],
   'Indie/Folk': [
-    { label: '🌃 City Pop', bpm: 110, key: 'F', instruments: ['Retro Synth', 'Funky Guitar', 'Bass'] },
-    { label: '☕ Cafe Acoustic', bpm: 80, key: 'D', instruments: ['Acoustic Guitar', 'Piano'] }
+    { label: '🌃 City Pop', bpm: 110, key: 'F', instruments: ['Retro Synth', 'Funky Guitar', 'Bass', 'Saxophone'] },
+    { label: '☕ Cafe Acoustic', bpm: 80, key: 'D', instruments: ['Acoustic Guitar', 'Piano', 'Shaker'] },
+    { label: '📼 Lo-fi Indie', bpm: 85, key: 'Ab', instruments: ['Vinyl Crackle', 'Soft Keys', 'Muted Trumpet'] },
+    { label: '☁️ Dream Pop', bpm: 100, key: 'C#m', instruments: ['Reverb Guitar', 'Whisper Vocals', 'Synth Pad'] },
+    { label: '📖 Folk Ballad', bpm: 75, key: 'C', instruments: ['Harmonica', 'Acoustic Guitar', 'Accordion'] }
+  ],
+  'Jazz/Bossa': [
+    { label: '🎺 Standard Jazz', bpm: 120, key: 'Bb', instruments: ['Walking Bass', 'Piano', 'Ride Cymbal', 'Trumpet'] },
+    { label: '🏖️ Bossa Nova', bpm: 130, key: 'Dmaj7', instruments: ['Nylon Guitar', 'Shaker', 'Piano', 'Flute'] },
+    { label: '🕶️ Acid Jazz', bpm: 105, key: 'Am', instruments: ['Funky Drums', 'Rhodes', 'Brass', 'Wah Guitar'] },
+    { label: '🎷 Big Band', bpm: 160, key: 'C', instruments: ['Brass Section', 'Upright Bass', 'Drums'] },
+    { label: '🧘 Smooth Jazz', bpm: 95, key: 'E', instruments: ['Saxophone', 'Synth Pads', 'Electric Bass'] }
   ],
   'OST': [
-    { label: '🎬 Drama Emotional', bpm: 65, key: 'Bb', instruments: ['Piano', 'Orchestra'] },
-    { label: '⚔️ Epic Action', bpm: 120, key: 'Gm', instruments: ['Percussion', 'Brass', 'Strings'] }
+    { label: '🎬 Drama Emotional', bpm: 65, key: 'Bb', instruments: ['Piano', 'Orchestra', 'Strings'] },
+    { label: '⚔️ Epic Action', bpm: 120, key: 'Gm', instruments: ['Percussion', 'Brass', 'Strings', 'Choir'] },
+    { label: '💕 Rom-Com', bpm: 110, key: 'G', instruments: ['Pizzicato Strings', 'Whistle', 'Piano', 'Shaker'] },
+    { label: '🔎 Mystery/Thriller', bpm: 90, key: 'Dm', instruments: ['Low Strings', 'FX', 'Piano', 'Sub Bass'] },
+    { label: '🎎 Historical (Sageuk)', bpm: 80, key: 'Cm', instruments: ['Daegeum', 'Gayageum', 'Strings', 'Percussion'] }
+  ],
+  'Healing/Meditation': [
+    { label: '🎹 Piano Solo', bpm: 60, key: 'C', instruments: ['Soft Piano', 'Reverb'] },
+    { label: '🌌 Ambient', bpm: 0, key: 'E', instruments: ['Synth Pads', 'No Drums', 'Drone'] },
+    { label: '🌿 Nature ASMR', bpm: 60, key: 'G', instruments: ['Rain Sound', 'Flute', 'Wind Chimes'] },
+    { label: '💤 Deep Sleep', bpm: 50, key: 'Bb', instruments: ['Low Frequencies', 'Soft Synth', 'White Noise'] },
+    { label: '🧘 Singing Bowl', bpm: 0, key: 'C', instruments: ['Bell Sounds', 'Soft Chimes', 'Silence'] }
   ],
   'Custom': [
     { label: 'Basic', bpm: 100, key: 'C', instruments: ['Piano', 'Drums', 'Bass'] }

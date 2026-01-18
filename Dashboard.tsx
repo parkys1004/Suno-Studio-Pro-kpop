@@ -110,7 +110,7 @@ const Dashboard = ({ projects, onCreate, onOpen, onDelete, onExport, legibilityM
                     <div>
                         <label style={{ display: 'block', color: labelColor, fontSize: '13px', marginBottom: '5px' }}>Mood</label>
                         <select value={newProjectForm.mood} onChange={e => setNewProjectForm({...newProjectForm, mood: e.target.value})} style={{ width: '100%', padding: '12px', backgroundColor: '#111827', color: 'white', border: '1px solid #374151', borderRadius: '8px' }}>
-                            {MOODS.map(m => <option key={m} value={m}>{m}</option>)}
+                            {MOODS.map(m => <option key={m.id} value={m.label}>{m.label} ({m.ko})</option>)}
                         </select>
                     </div>
                 </div>
@@ -126,3 +126,4 @@ const Dashboard = ({ projects, onCreate, onOpen, onDelete, onExport, legibilityM
 };
 
 export default Dashboard;
+    
