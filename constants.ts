@@ -198,7 +198,7 @@ export const BLOCK_SAMPLES: Record<string, string[]> = {
 export const DEFAULT_SAMPLE_PROMPTS = [
   {
     label: "✨ K-Pop Girl Crush",
-    text: "[Intro: Heavy Bass], K-Pop Girl Crush, 130 BPM, Key F#m. Powerful 808 bass, trap beats, aggressive synth lead, confident female vocals, catchy hook, English rap verse. Blackpink style."
+    text: "[Intro: Heavy Bass], K-Pop Girl Crush, 130 BPM, Key F#m. Powerful 808 bass, trap beats, aggressive synth lead, confident female vocals, catchy hook, English rap verse. Charismatic and Bold style."
   },
   {
     label: "🌊 Refreshing Boy Group",
@@ -219,6 +219,7 @@ export const DEFAULT_SAMPLE_PROMPTS = [
 ];
 
 export const STRUCTURE_TEMPLATES = {
+  // --- K-POP & IDOL (9) ---
   'Custom': [],
   'Standard K-Pop': [
       { type: 'Intro', description: 'Signature Sound & Member Narration', duration: 4 },
@@ -231,96 +232,6 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Bridge', description: 'Emotional High Note & Slow down', duration: 8 },
       { type: 'Chorus', description: 'Final Chorus (Explosion)', duration: 16 },
       { type: 'Outro', description: 'Ending Pose Fade', duration: 4 }
-  ],
-  'Y2K Style (NewJeans Vibe)': [
-      { type: 'Intro', description: 'Retro Synth & Beat', duration: 8 },
-      { type: 'Chorus', description: 'Catchy Hook Intro', duration: 16 },
-      { type: 'Verse', description: 'Groovy Vocal', duration: 16 },
-      { type: 'Chorus', description: 'Main Hook', duration: 16 },
-      { type: 'Verse', description: 'Verse 2', duration: 16 },
-      { type: 'Chorus', description: 'Main Hook', duration: 16 },
-      { type: 'Outro', description: 'Fade out with Ad-libs', duration: 8 }
-  ],
-  'Viral Hook Song (Short)': [
-      { type: 'Intro', description: 'Impact Sound', duration: 4 },
-      { type: 'Chorus', description: 'Viral Challenge Part', duration: 16 },
-      { type: 'Verse', description: 'Short Rap', duration: 8 },
-      { type: 'Chorus', description: 'Viral Challenge Part', duration: 16 },
-      { type: 'Outro', description: 'Signature Sound', duration: 4 }
-  ],
-  'Emotional Ballad (OST)': [
-      { type: 'Intro', description: 'Piano Solo', duration: 8 },
-      { type: 'Verse', description: 'Calm Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Emotional Melody', duration: 16 },
-      { type: 'Verse', description: 'Verse 2 (Strings Enter)', duration: 16 },
-      { type: 'Chorus', description: 'Emotional Melody', duration: 16 },
-      { type: 'Bridge', description: 'Orchestral Climax', duration: 8 },
-      { type: 'Chorus', description: 'Final Chorus (Max Emotion)', duration: 16 },
-      { type: 'Outro', description: 'Piano Fade out', duration: 8 }
-  ],
-  'Hip-Hop (Trap)': [
-      { type: 'Intro', description: 'Beat Tag & Mumble', duration: 8 },
-      { type: 'Chorus', description: 'Main Theme', duration: 16 },
-      { type: 'Verse', description: 'Verse 1 (Tight Flow)', duration: 16 },
-      { type: 'Chorus', description: 'Main Theme', duration: 16 },
-      { type: 'Verse', description: 'Verse 2 (Different Flow)', duration: 16 },
-      { type: 'Chorus', description: 'Main Theme', duration: 16 },
-      { type: 'Outro', description: 'Fade out', duration: 8 }
-  ],
-  'Fusion Gugak (Joseon Pop)': [
-      { type: 'Intro', description: 'Gayageum Riff', duration: 8 },
-      { type: 'Verse', description: 'Pansori Style Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Modern Pop Hook', duration: 16 },
-      { type: 'Instrumental', description: 'Traditional & Trap Drop', duration: 8 },
-      { type: 'Verse', description: 'Rap Verse', duration: 16 },
-      { type: 'Chorus', description: 'Main Hook', duration: 16 },
-      { type: 'Outro', description: 'Kwaenggwari Ending', duration: 8 }
-  ],
-  'EDM Trot (Party)': [
-      { type: 'Intro', description: 'Brass & Electronic Beat', duration: 8 },
-      { type: 'Verse', description: 'Trot Melody', duration: 16 },
-      { type: 'Chorus', description: 'Addictive Hook', duration: 16 },
-      { type: 'Instrumental', description: 'Dance Break (Synthesizer)', duration: 16 },
-      { type: 'Verse', description: 'Verse 2', duration: 16 },
-      { type: 'Chorus', description: 'Addictive Hook', duration: 16 },
-      { type: 'Outro', description: 'High Energy Finish', duration: 4 }
-  ],
-  'Rock Ballad (Band)': [
-      { type: 'Intro', description: 'Electric Guitar Solo', duration: 8 },
-      { type: 'Verse', description: 'Bass & Vocal', duration: 16 },
-      { type: 'Chorus', description: 'Full Band Explosion', duration: 16 },
-      { type: 'Verse', description: 'Verse 2', duration: 16 },
-      { type: 'Chorus', description: 'Full Band', duration: 16 },
-      { type: 'Instrumental', description: 'Guitar Solo', duration: 16 },
-      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
-      { type: 'Outro', description: 'Band Finish', duration: 8 }
-  ],
-  'City Pop (Retro)': [
-      { type: 'Intro', description: '80s Drum Fill & Synth', duration: 8 },
-      { type: 'Verse', description: 'Dreamy Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Nostalgic Melody', duration: 16 },
-      { type: 'Instrumental', description: 'Saxophone or Synth Solo', duration: 8 },
-      { type: 'Verse', description: 'Verse 2', duration: 16 },
-      { type: 'Chorus', description: 'Nostalgic Melody', duration: 16 },
-      { type: 'Outro', description: 'Long Fade Out', duration: 16 }
-  ],
-  'Acoustic Indie': [
-      { type: 'Intro', description: 'Guitar Arpeggio', duration: 8 },
-      { type: 'Verse', description: 'Soft Whispering', duration: 16 },
-      { type: 'Chorus', description: 'Folk Melody', duration: 16 },
-      { type: 'Verse', description: 'Verse 2', duration: 16 },
-      { type: 'Bridge', description: 'Humming / Scat', duration: 8 },
-      { type: 'Chorus', description: 'Folk Melody', duration: 16 },
-      { type: 'Outro', description: 'Guitar Chord', duration: 4 }
-  ],
-  'High Teen (School Concept)': [
-      { type: 'Intro', description: 'School Bell & Guitar', duration: 8 },
-      { type: 'Verse', description: 'Cheerful Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Energetic Chorus', duration: 16 },
-      { type: 'Verse', description: 'Rap (Playful)', duration: 16 },
-      { type: 'Bridge', description: 'Cheerleading Chant', duration: 8 },
-      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
-      { type: 'Outro', description: 'Laughing & Fade', duration: 4 }
   ],
   'Girl Crush (Strong)': [
       { type: 'Intro', description: 'English Narration & Bass', duration: 8 },
@@ -342,6 +253,15 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Chorus', description: 'Final Chorus', duration: 16 },
       { type: 'Outro', description: 'Heavy Breathing', duration: 4 }
   ],
+  'High Teen (School Concept)': [
+      { type: 'Intro', description: 'School Bell & Guitar', duration: 8 },
+      { type: 'Verse', description: 'Cheerful Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Energetic Chorus', duration: 16 },
+      { type: 'Verse', description: 'Rap (Playful)', duration: 16 },
+      { type: 'Bridge', description: 'Cheerleading Chant', duration: 8 },
+      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
+      { type: 'Outro', description: 'Laughing & Fade', duration: 4 }
+  ],
   'Summer Song (Cool)': [
       { type: 'Intro', description: 'Wave Sound & Tropical House', duration: 8 },
       { type: 'Verse', description: 'Fresh Vocals', duration: 16 },
@@ -362,14 +282,43 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Chorus', description: 'Final Chorus', duration: 16 },
       { type: 'Outro', description: 'Merry Christmas Whisper', duration: 4 }
   ],
-  'R&B Groove': [
-      { type: 'Intro', description: 'Electric Piano Chords', duration: 8 },
-      { type: 'Verse', description: 'Groovy Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Falsetto Hook', duration: 16 },
-      { type: 'Verse', description: 'Singing Rap', duration: 16 },
-      { type: 'Chorus', description: 'Falsetto Hook', duration: 16 },
-      { type: 'Instrumental', description: 'Bass Solo', duration: 8 },
-      { type: 'Outro', description: 'Vocal Runs', duration: 8 }
+  'Latin-Kpop (Fusion)': [
+      { type: 'Intro', description: 'Spanish Guitar Riff', duration: 8 },
+      { type: 'Verse', description: 'Seductive K-Pop Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Reggaeton Beat Drop', duration: 16 },
+      { type: 'Verse', description: 'Rap with Latin Flow', duration: 16 },
+      { type: 'Chorus', description: 'Reggaeton Beat Drop', duration: 16 },
+      { type: 'Outro', description: 'Adios', duration: 4 }
+  ],
+  'K-Pop Gen 2 (Retro Hook)': [
+      { type: 'Intro', description: 'Dramatic Synth Intro', duration: 8 },
+      { type: 'Chorus', description: 'Main Hook (Intro Chorus)', duration: 16 },
+      { type: 'Verse', description: 'Verse 1', duration: 16 },
+      { type: 'Chorus', description: 'Main Hook (Repetition)', duration: 16 },
+      { type: 'Verse', description: 'Rap Bridge', duration: 16 },
+      { type: 'Chorus', description: 'Key Change Final Chorus', duration: 16 },
+      { type: 'Outro', description: 'Fade Out', duration: 8 }
+  ],
+  'Solo Idol (Dance)': [
+      { type: 'Intro', description: 'Focus on Vocal Ad-lib', duration: 8 },
+      { type: 'Verse', description: 'Verse 1', duration: 16 },
+      { type: 'Verse', description: 'Pre-Chorus', duration: 8 },
+      { type: 'Chorus', description: 'Main Chorus (Performance)', duration: 16 },
+      { type: 'Instrumental', description: 'Dance Break', duration: 8 },
+      { type: 'Bridge', description: 'High Note', duration: 8 },
+      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
+      { type: 'Outro', description: 'Ending Pose', duration: 4 }
+  ],
+
+  // --- TRENDY & VIBE (6) ---
+  'Y2K Style (NewJeans Vibe)': [
+      { type: 'Intro', description: 'Retro Synth & Beat', duration: 8 },
+      { type: 'Chorus', description: 'Catchy Hook Intro', duration: 16 },
+      { type: 'Verse', description: 'Groovy Vocal', duration: 16 },
+      { type: 'Chorus', description: 'Main Hook', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Chorus', description: 'Main Hook', duration: 16 },
+      { type: 'Outro', description: 'Fade out with Ad-libs', duration: 8 }
   ],
   'Cyberpunk (Aespa Style)': [
       { type: 'Intro', description: 'Glitch Sound & Metallic Beat', duration: 8 },
@@ -390,21 +339,88 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Chorus', description: 'Magical Melody', duration: 16 },
       { type: 'Outro', description: 'Disappearing Sound', duration: 8 }
   ],
-  'Introvert / Lofi': [
-      { type: 'Intro', description: 'Vinyl Crackle & Rain', duration: 8 },
-      { type: 'Verse', description: 'Mumbled Singing', duration: 16 },
-      { type: 'Chorus', description: 'Simple Repetitive Melody', duration: 16 },
+  'City Pop (Retro)': [
+      { type: 'Intro', description: '80s Drum Fill & Synth', duration: 8 },
+      { type: 'Verse', description: 'Dreamy Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Nostalgic Melody', duration: 16 },
+      { type: 'Instrumental', description: 'Saxophone or Synth Solo', duration: 8 },
       { type: 'Verse', description: 'Verse 2', duration: 16 },
-      { type: 'Chorus', description: 'Simple Repetitive Melody', duration: 16 },
-      { type: 'Outro', description: 'Tape Stop', duration: 4 }
+      { type: 'Chorus', description: 'Nostalgic Melody', duration: 16 },
+      { type: 'Outro', description: 'Long Fade Out', duration: 16 }
   ],
-  'Festival / EDM': [
-      { type: 'Intro', description: 'Build Up Riser', duration: 16 },
-      { type: 'Drop', description: 'Big Room Drop (Jump!)', duration: 16 },
-      { type: 'Verse', description: 'Hype Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Sing-along Anthem', duration: 16 },
-      { type: 'Drop', description: 'Second Drop', duration: 16 },
-      { type: 'Outro', description: 'Fireworks Sound', duration: 8 }
+  'Jersey Club Remix': [
+      { type: 'Intro', description: 'Sample Chop & Fast Beat', duration: 8 },
+      { type: 'Chorus', description: 'Repetitive Hook (Fast)', duration: 16 },
+      { type: 'Verse', description: 'Short Rap Verse', duration: 16 },
+      { type: 'Drop', description: 'Bed Squeak Sample & Kick', duration: 16 },
+      { type: 'Chorus', description: 'Repetitive Hook', duration: 16 },
+      { type: 'Outro', description: 'Abrupt Cut', duration: 4 }
+  ],
+  'Hyperpop (Glitch)': [
+      { type: 'Intro', description: 'Distorted Noise', duration: 4 },
+      { type: 'Chorus', description: 'Autotune Overload', duration: 16 },
+      { type: 'Verse', description: 'Fast Paced Singing', duration: 8 },
+      { type: 'Bridge', description: 'Complete Silence or Noise', duration: 4 },
+      { type: 'Chorus', description: 'Max Volume Chorus', duration: 16 },
+      { type: 'Outro', description: 'Glitch Out', duration: 4 }
+  ],
+
+  // --- HIP-HOP & R&B (4) ---
+  'Hip-Hop (Trap)': [
+      { type: 'Intro', description: 'Beat Tag & Mumble', duration: 8 },
+      { type: 'Chorus', description: 'Main Theme', duration: 16 },
+      { type: 'Verse', description: 'Verse 1 (Tight Flow)', duration: 16 },
+      { type: 'Chorus', description: 'Main Theme', duration: 16 },
+      { type: 'Verse', description: 'Verse 2 (Different Flow)', duration: 16 },
+      { type: 'Chorus', description: 'Main Theme', duration: 16 },
+      { type: 'Outro', description: 'Fade out', duration: 8 }
+  ],
+  'R&B Groove': [
+      { type: 'Intro', description: 'Electric Piano Chords', duration: 8 },
+      { type: 'Verse', description: 'Groovy Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Falsetto Hook', duration: 16 },
+      { type: 'Verse', description: 'Singing Rap', duration: 16 },
+      { type: 'Chorus', description: 'Falsetto Hook', duration: 16 },
+      { type: 'Instrumental', description: 'Bass Solo', duration: 8 },
+      { type: 'Outro', description: 'Vocal Runs', duration: 8 }
+  ],
+  'Rap Cypher (Team)': [
+      { type: 'Intro', description: 'Hype Man Intro', duration: 8 },
+      { type: 'Verse', description: 'Rapper 1 (Flow A)', duration: 16 },
+      { type: 'Verse', description: 'Rapper 2 (Flow B)', duration: 16 },
+      { type: 'Verse', description: 'Rapper 3 (Flow C)', duration: 16 },
+      { type: 'Verse', description: 'Rapper 4 (Fast)', duration: 16 },
+      { type: 'Outro', description: 'Beat Fade', duration: 8 }
+  ],
+  'UK Garage / 2-Step': [
+      { type: 'Intro', description: 'Shuffling Hats', duration: 8 },
+      { type: 'Verse', description: 'Soulful Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Chopped Vocal Sample', duration: 16 },
+      { type: 'Drop', description: 'Heavy Bassline', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Outro', description: 'Drum Fade', duration: 8 }
+  ],
+
+  // --- BALLAD & OST (5) ---
+  'Emotional Ballad (OST)': [
+      { type: 'Intro', description: 'Piano Solo', duration: 8 },
+      { type: 'Verse', description: 'Calm Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Emotional Melody', duration: 16 },
+      { type: 'Verse', description: 'Verse 2 (Strings Enter)', duration: 16 },
+      { type: 'Chorus', description: 'Emotional Melody', duration: 16 },
+      { type: 'Bridge', description: 'Orchestral Climax', duration: 8 },
+      { type: 'Chorus', description: 'Final Chorus (Max Emotion)', duration: 16 },
+      { type: 'Outro', description: 'Piano Fade out', duration: 8 }
+  ],
+  'Rock Ballad (Band)': [
+      { type: 'Intro', description: 'Electric Guitar Solo', duration: 8 },
+      { type: 'Verse', description: 'Bass & Vocal', duration: 16 },
+      { type: 'Chorus', description: 'Full Band Explosion', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Chorus', description: 'Full Band', duration: 16 },
+      { type: 'Instrumental', description: 'Guitar Solo', duration: 16 },
+      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
+      { type: 'Outro', description: 'Band Finish', duration: 8 }
   ],
   'Musical Style': [
       { type: 'Intro', description: 'Orchestra Overture', duration: 8 },
@@ -414,13 +430,40 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Chorus', description: 'Grand Ensemble (Fortissimo)', duration: 16 },
       { type: 'Outro', description: 'Final Chord Hold', duration: 8 }
   ],
-  'Jazz Bar (Solo)': [
-      { type: 'Intro', description: 'Double Bass & Brush Drum', duration: 8 },
-      { type: 'Verse', description: 'Soulful Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
-      { type: 'Instrumental', description: 'Piano Improvisation', duration: 16 },
-      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
-      { type: 'Outro', description: 'Scat Singing', duration: 8 }
+  'Grand Epic (Final)': [
+      { type: 'Intro', description: 'Marching Drums & Choir', duration: 16 },
+      { type: 'Verse', description: 'Low & Serious', duration: 16 },
+      { type: 'Chorus', description: 'Epic Harmony', duration: 16 },
+      { type: 'Bridge', description: 'Silence then Explosion', duration: 8 },
+      { type: 'Chorus', description: 'Maximum Volume & Choir', duration: 16 },
+      { type: 'Outro', description: 'Orchestral Hit', duration: 4 }
+  ],
+  'Movie Trailer (Build-up)': [
+      { type: 'Intro', description: 'Low Drone & Ticking', duration: 8 },
+      { type: 'Verse', description: 'Slow Piano Notes', duration: 8 },
+      { type: 'Bridge', description: 'Rising Tension (Riser)', duration: 8 },
+      { type: 'Drop', description: 'Epic Impact Hits', duration: 8 },
+      { type: 'Chorus', description: 'Full Orchestra Action', duration: 16 },
+      { type: 'Outro', description: 'Sudden Silence', duration: 4 }
+  ],
+
+  // --- INDIE & ACOUSTIC (5) ---
+  'Acoustic Indie': [
+      { type: 'Intro', description: 'Guitar Arpeggio', duration: 8 },
+      { type: 'Verse', description: 'Soft Whispering', duration: 16 },
+      { type: 'Chorus', description: 'Folk Melody', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Bridge', description: 'Humming / Scat', duration: 8 },
+      { type: 'Chorus', description: 'Folk Melody', duration: 16 },
+      { type: 'Outro', description: 'Guitar Chord', duration: 4 }
+  ],
+  'Introvert / Lofi': [
+      { type: 'Intro', description: 'Vinyl Crackle & Rain', duration: 8 },
+      { type: 'Verse', description: 'Mumbled Singing', duration: 16 },
+      { type: 'Chorus', description: 'Simple Repetitive Melody', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Chorus', description: 'Simple Repetitive Melody', duration: 16 },
+      { type: 'Outro', description: 'Tape Stop', duration: 4 }
   ],
   'Acoustic Cafe': [
       { type: 'Intro', description: 'Guitar Strumming', duration: 4 },
@@ -430,21 +473,107 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Chorus', description: 'Comforting Melody', duration: 16 },
       { type: 'Outro', description: 'Coffee Pouring Sound', duration: 4 }
   ],
-  'Latin-Kpop (Fusion)': [
-      { type: 'Intro', description: 'Spanish Guitar Riff', duration: 8 },
-      { type: 'Verse', description: 'Seductive K-Pop Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Reggaeton Beat Drop', duration: 16 },
-      { type: 'Verse', description: 'Rap with Latin Flow', duration: 16 },
-      { type: 'Chorus', description: 'Reggaeton Beat Drop', duration: 16 },
-      { type: 'Outro', description: 'Adios', duration: 4 }
+  'Shoegaze (Dreamy)': [
+      { type: 'Intro', description: 'Wall of Sound Guitar', duration: 16 },
+      { type: 'Verse', description: 'Buried Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Loud Distorted Wash', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Outro', description: 'Feedback Noise', duration: 16 }
   ],
-  'Grand Epic (Final)': [
-      { type: 'Intro', description: 'Marching Drums & Choir', duration: 16 },
-      { type: 'Verse', description: 'Low & Serious', duration: 16 },
-      { type: 'Chorus', description: 'Epic Harmony', duration: 16 },
-      { type: 'Bridge', description: 'Silence then Explosion', duration: 8 },
-      { type: 'Chorus', description: 'Maximum Volume & Choir', duration: 16 },
-      { type: 'Outro', description: 'Orchestral Hit', duration: 4 }
+  'Ambient / Meditation': [
+      { type: 'Intro', description: 'Nature Sounds', duration: 16 },
+      { type: 'Verse', description: 'Slow Pad Swell', duration: 16 },
+      { type: 'Chorus', description: 'No Melody (Atmosphere)', duration: 16 },
+      { type: 'Verse', description: 'Chimes & Bells', duration: 16 },
+      { type: 'Outro', description: 'Slow Fade to Silence', duration: 16 }
+  ],
+
+  // --- PARTY & EDM (5) ---
+  'Festival / EDM': [
+      { type: 'Intro', description: 'Build Up Riser', duration: 16 },
+      { type: 'Drop', description: 'Big Room Drop (Jump!)', duration: 16 },
+      { type: 'Verse', description: 'Hype Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Sing-along Anthem', duration: 16 },
+      { type: 'Drop', description: 'Second Drop', duration: 16 },
+      { type: 'Outro', description: 'Fireworks Sound', duration: 8 }
+  ],
+  'EDM Trot (Party)': [
+      { type: 'Intro', description: 'Brass & Electronic Beat', duration: 8 },
+      { type: 'Verse', description: 'Trot Melody', duration: 16 },
+      { type: 'Chorus', description: 'Addictive Hook', duration: 16 },
+      { type: 'Instrumental', description: 'Dance Break (Synthesizer)', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Chorus', description: 'Addictive Hook', duration: 16 },
+      { type: 'Outro', description: 'High Energy Finish', duration: 4 }
+  ],
+  'Drum & Bass (Liquid)': [
+      { type: 'Intro', description: 'Fast Breakbeat & Pad', duration: 8 },
+      { type: 'Verse', description: 'Fast Vocal Delivery', duration: 16 },
+      { type: 'Drop', description: 'Reese Bass & Rolling Drums', duration: 16 },
+      { type: 'Bridge', description: 'Half-time Section', duration: 8 },
+      { type: 'Drop', description: 'Full Energy', duration: 16 },
+      { type: 'Outro', description: 'Beat Fade', duration: 8 }
+  ],
+  'Heavy Metal (Breakdown)': [
+      { type: 'Intro', description: 'Guitar Feedback & Scream', duration: 4 },
+      { type: 'Verse', description: 'Aggressive Riff', duration: 16 },
+      { type: 'Chorus', description: 'Melodic Shout', duration: 16 },
+      { type: 'Drop', description: 'Heavy Breakdown (Mosh)', duration: 16 },
+      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
+      { type: 'Outro', description: 'Double Kick Blast', duration: 4 }
+  ],
+  'Punk Rock (Fast)': [
+      { type: 'Intro', description: '1-2-3-4 Count & Fast Guitar', duration: 4 },
+      { type: 'Verse', description: 'Power Chords', duration: 8 },
+      { type: 'Chorus', description: 'Anthemic Shout', duration: 8 },
+      { type: 'Verse', description: 'Verse 2', duration: 8 },
+      { type: 'Chorus', description: 'Anthemic Shout', duration: 8 },
+      { type: 'Outro', description: 'Feedback', duration: 4 }
+  ],
+
+  // --- SHORT FORM (3) ---
+  'Viral Hook Song (Short)': [
+      { type: 'Intro', description: 'Impact Sound', duration: 4 },
+      { type: 'Chorus', description: 'Viral Challenge Part', duration: 16 },
+      { type: 'Verse', description: 'Short Rap', duration: 8 },
+      { type: 'Chorus', description: 'Viral Challenge Part', duration: 16 },
+      { type: 'Outro', description: 'Signature Sound', duration: 4 }
+  ],
+  'TikTok Challenge (15s)': [
+      { type: 'Intro', description: 'Catchy Phrase', duration: 2 },
+      { type: 'Chorus', description: 'Main Dance Part', duration: 8 },
+      { type: 'Outro', description: 'Funny Sound', duration: 2 }
+  ],
+  'YouTube Intro (Logo)': [
+      { type: 'Intro', description: 'Whoosh Sound', duration: 2 },
+      { type: 'Chorus', description: 'Channel Jingle', duration: 4 },
+      { type: 'Outro', description: 'Ding!', duration: 2 }
+  ],
+
+  // --- FUSION & SPECIAL (3) ---
+  'Fusion Gugak (Joseon Pop)': [
+      { type: 'Intro', description: 'Gayageum Riff', duration: 8 },
+      { type: 'Verse', description: 'Pansori Style Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Modern Pop Hook', duration: 16 },
+      { type: 'Instrumental', description: 'Traditional & Trap Drop', duration: 8 },
+      { type: 'Verse', description: 'Rap Verse', duration: 16 },
+      { type: 'Chorus', description: 'Main Hook', duration: 16 },
+      { type: 'Outro', description: 'Kwaenggwari Ending', duration: 8 }
+  ],
+  'Jazz Bar (Solo)': [
+      { type: 'Intro', description: 'Double Bass & Brush Drum', duration: 8 },
+      { type: 'Verse', description: 'Soulful Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
+      { type: 'Instrumental', description: 'Piano Improvisation', duration: 16 },
+      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
+      { type: 'Outro', description: 'Scat Singing', duration: 8 }
+  ],
+  'Neo-Soul (Groovy)': [
+      { type: 'Intro', description: 'Laid back drum beat', duration: 8 },
+      { type: 'Verse', description: 'Complex Chords & Vocal', duration: 16 },
+      { type: 'Chorus', description: 'Smooth Harmony', duration: 16 },
+      { type: 'Instrumental', description: 'Organ Solo', duration: 8 },
+      { type: 'Outro', description: 'Vocal Ad-libs fade', duration: 8 }
   ]
 };
 

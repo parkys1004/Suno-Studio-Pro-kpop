@@ -196,6 +196,12 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
             }
         }
 
+        // Add Reference Song Instruction
+        let referenceInstruction = '';
+        if (project.referenceSongTitle) {
+             referenceInstruction = `Reference Style: "${project.referenceSongTitle}"${project.referenceArtist ? ` by ${project.referenceArtist}` : ''}. Use this song as a sonic reference (vibe, mixing, instrumentation).`;
+        }
+
         const versionContext = sunoVersion === 'v5' 
             ? "Suno v5 (Latest). Focus on natural language descriptions." 
             : "Suno.ai v3.5 (Standard).";
@@ -232,6 +238,9 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
         const prompt = `
           Construct a high-quality prompt for a music generation AI (${versionContext}).
           
+          CRITICAL RULE: Do NOT include specific Artist Names or Song Titles in the output. Suno blocks artist names.
+          Instead, translate the style of "${project.referenceSongTitle || ''} ${project.referenceArtist || ''}" into technical musical terms (e.g., genre, instruments, vocal style, bpm, mood).
+
           Project Metadata:
           - Genre: ${project.genre} (${project.subGenre})
           - Mood: ${project.mood}
@@ -241,6 +250,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
           - BPM: ${project.bpm}
           - Key: ${project.key}
           
+          ${referenceInstruction}
           ${danceInstruction}
           ${introInstruction}
 
@@ -604,6 +614,18 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                          기본 생성 (Tag)
                       </button>
                   </div>
+                  {promptStyle === 'structured' && (
+                      <div style={{ marginTop: '10px', padding: '10px', backgroundColor: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '6px', fontSize: '12px', color: '#93c5fd' }}>
+                          <strong style={{ display: 'block', marginBottom: '4px' }}>ℹ️ 5단계 생성 정보 (Data Sources):</strong>
+                          <ul style={{ margin: 0, paddingLeft: '15px', lineHeight: '1.5' }}>
+                              <li><strong>1. Identity:</strong> 장르 ({project.genre}) + 보컬 타입 ({project.vocalType})</li>
+                              <li><strong>2. Mood:</strong> 분위기 ({project.mood}) + BPM ({project.bpm}) + Key ({project.key})</li>
+                              <li><strong>3. Instruments:</strong> 선택된 악기 ({project.instruments ? project.instruments.length : 0}개)</li>
+                              <li><strong>4. Performance:</strong> 스타일 설명 (Style Description)</li>
+                              <li><strong>5. Production:</strong> 음향 공간감 및 믹싱 스타일</li>
+                          </ul>
+                      </div>
+                  )}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>

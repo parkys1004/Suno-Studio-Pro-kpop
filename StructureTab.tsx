@@ -3,10 +3,75 @@ import React from 'react';
 import { Project, SongBlock } from './types';
 import { BLOCK_SAMPLES, STRUCTURE_TEMPLATES, INTRO_STYLES } from './constants';
 
+// Define categories for better organization
+const TEMPLATE_CATEGORIES: Record<string, string[]> = {
+    "✨ 기본 (Basic)": ["Custom"],
+    "🎤 K-Pop & Idol": [
+        "Standard K-Pop",
+        "Girl Crush (Strong)",
+        "Boy Group (Performance)",
+        "High Teen (School Concept)",
+        "K-Pop Gen 2 (Retro Hook)",
+        "Solo Idol (Dance)",
+        "Summer Song (Cool)",
+        "Winter Song (Carol)",
+        "Latin-Kpop (Fusion)"
+    ],
+    "😎 Trendy & Vibe": [
+        "Y2K Style (NewJeans Vibe)",
+        "Cyberpunk (Aespa Style)",
+        "Dreamy / Fairy",
+        "City Pop (Retro)",
+        "Jersey Club Remix",
+        "Hyperpop (Glitch)"
+    ],
+    "🎧 Hip-Hop & R&B": [
+        "Hip-Hop (Trap)",
+        "R&B Groove",
+        "Rap Cypher (Team)",
+        "UK Garage / 2-Step"
+    ],
+    "🎹 Ballad & OST": [
+        "Emotional Ballad (OST)",
+        "Rock Ballad (Band)",
+        "Musical Style",
+        "Grand Epic (Final)",
+        "Movie Trailer (Build-up)"
+    ],
+    "☕ Indie & Chill": [
+        "Acoustic Indie",
+        "Introvert / Lofi",
+        "Acoustic Cafe",
+        "Shoegaze (Dreamy)",
+        "Ambient / Meditation"
+    ],
+    "🎉 Party & Club": [
+        "Festival / EDM",
+        "EDM Trot (Party)",
+        "Drum & Bass (Liquid)",
+        "Heavy Metal (Breakdown)",
+        "Punk Rock (Fast)"
+    ],
+    "📱 Short Form (TikTok/Shorts)": [
+        "Viral Hook Song (Short)",
+        "TikTok Challenge (15s)",
+        "YouTube Intro (Logo)"
+    ],
+    "🎸 Fusion & Special": [
+        "Fusion Gugak (Joseon Pop)",
+        "Jazz Bar (Solo)",
+        "Neo-Soul (Groovy)"
+    ]
+};
+
 // --- TAB: Structure ---
 const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
   // Use persisted template or default to 'Custom'
   const selectedTemplate = project.selectedStructureTemplate || 'Custom';
+
+  // Calculate uncategorized templates (safety net)
+  const allCategorized = Object.values(TEMPLATE_CATEGORIES).flat();
+  const uncategorized = Object.keys(STRUCTURE_TEMPLATES).filter(t => !allCategorized.includes(t));
 
   const moveBlock = (index: number, direction: -1 | 1) => {
      const newStructure = [...project.structure];
@@ -68,11 +133,29 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
             <select 
                 value={selectedTemplate} 
                 onChange={(e) => applyTemplate(e.target.value)}
-                style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: '#111827', color: 'white', border: '1px solid #4b5563' }}
+                style={{ 
+                    padding: '8px 12px', borderRadius: '8px', backgroundColor: '#111827', 
+                    color: 'white', border: '1px solid #4b5563', minWidth: '250px', cursor: 'pointer'
+                }}
             >
-                {Object.keys(STRUCTURE_TEMPLATES).map(t => (
-                    <option key={t} value={t}>{t}</option>
+                {Object.entries(TEMPLATE_CATEGORIES).map(([category, templates]) => (
+                    <optgroup key={category} label={category} style={{ color: '#fbbf24', fontWeight: 'bold', fontStyle: 'normal' }}>
+                        {templates.map(t => (
+                            // @ts-ignore
+                            STRUCTURE_TEMPLATES[t] ? (
+                                <option key={t} value={t} style={{ color: 'white', fontWeight: 'normal' }}>{t}</option>
+                            ) : null
+                        ))}
+                    </optgroup>
                 ))}
+                
+                {uncategorized.length > 0 && (
+                    <optgroup label="📂 기타 (Others)" style={{ color: '#9ca3af', fontWeight: 'bold' }}>
+                        {uncategorized.map(t => (
+                            <option key={t} value={t} style={{ color: 'white', fontWeight: 'normal' }}>{t}</option>
+                        ))}
+                    </optgroup>
+                )}
             </select>
             {selectedTemplate !== 'Custom' && (
                 <span style={{ 
