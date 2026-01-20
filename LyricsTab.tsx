@@ -639,17 +639,22 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
              <h2 style={{ fontSize: '20px', margin: 0, color: '#e11d48', display:'flex', alignItems:'center', gap:'10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                 <span className="material-symbols-outlined">edit_note</span> 에디터 (Editor)
              </h2>
-             <button
-                 onClick={copyToClipboard}
-                 disabled={!project.lyrics}
-                 style={{
-                    padding: '6px 12px', backgroundColor: '#374151',
-                    color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer',
-                    fontWeight: 'bold', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px'
-                 }}
-            >
-                <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>content_copy</span> 복사
-            </button>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                 <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: '500' }}>
+                    {(project.lyrics || '').length}자
+                 </span>
+                 <button
+                     onClick={copyToClipboard}
+                     disabled={!project.lyrics}
+                     style={{
+                        padding: '6px 12px', backgroundColor: '#374151',
+                        color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer',
+                        fontWeight: 'bold', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px'
+                     }}
+                >
+                    <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>content_copy</span> 복사
+                </button>
+            </div>
          </div>
          
          <textarea 
