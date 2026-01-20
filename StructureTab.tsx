@@ -318,53 +318,55 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
              </div>
 
             <div style={{ padding: '20px', backgroundColor: '#111827', borderRadius: '8px', border: '1px solid #374151' }}>
-                <h3 style={{ fontSize: '16px', margin: '0 0 10px 0', color: legibilityMode ? '#FFFFFF' : 'white' }}>🎧 DJ/Producer Intro/Outro 설정</h3>
+                <h3 style={{ fontSize: '16px', margin: '0 0 10px 0', color: legibilityMode ? '#FFFFFF' : 'white' }}>🎧 K-Pop 시그니처 & 엔딩 설정</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: legibilityMode ? '#FFFFFF' : 'inherit' }}>
-                        <input type="checkbox" checked={project.structure[0]?.type === 'Intro' && project.structure[0]?.description.includes('DJ')} 
+                        <input type="checkbox" checked={project.structure[0]?.type === 'Intro' && project.structure[0]?.description.includes('Signature')} 
                                onChange={(e) => {
                                    if (e.target.checked) {
+                                       const desc = project.djName ? `Signature Sound Intro (Producer Tag: ${project.djName})` : 'Signature Sound Intro (Catchy start)';
                                        if (project.structure[0].type !== 'Intro') {
-                                           const newStructure = [{ id: Date.now().toString(), type: 'Intro', description: 'DJ Friendly Intro (Percussion only)', duration: 4 }, ...project.structure];
+                                           const newStructure = [{ id: Date.now().toString(), type: 'Intro', description: desc, duration: 4 }, ...project.structure];
                                            onUpdate({ structure: newStructure });
                                        } else {
                                             const newStructure = [...project.structure];
-                                            newStructure[0] = { ...newStructure[0], description: 'DJ Friendly Intro (Percussion only)' };
+                                            newStructure[0] = { ...newStructure[0], description: desc };
                                             onUpdate({ structure: newStructure });
                                        }
                                    }
                                }}
                         /> 
-                        DJ Friendly Intro (Percussion Only)
+                        Signature Sound Intro (시그니처 사운드)
                     </label>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: legibilityMode ? '#FFFFFF' : 'inherit' }}>
-                        <input type="checkbox" checked={project.structure[project.structure.length-1]?.type === 'Outro' && project.structure[project.structure.length-1]?.description.includes('DJ')} 
+                        <input type="checkbox" checked={project.structure[project.structure.length-1]?.type === 'Outro' && project.structure[project.structure.length-1]?.description.includes('Ending')} 
                                 onChange={(e) => {
                                    if (e.target.checked) {
                                        // Logic to ensure outro exists
+                                       const desc = 'Ending Pose & Fade Out';
                                        const last = project.structure[project.structure.length-1];
                                        if (last.type !== 'Outro') {
-                                            const newStructure = [...project.structure, { id: Date.now().toString(), type: 'Outro', description: 'DJ Friendly Outro (Beat loop)', duration: 4 }];
+                                            const newStructure = [...project.structure, { id: Date.now().toString(), type: 'Outro', description: desc, duration: 4 }];
                                             onUpdate({ structure: newStructure });
                                        } else {
                                             const newStructure = [...project.structure];
-                                            newStructure[newStructure.length-1] = { ...newStructure[newStructure.length-1], description: 'DJ Friendly Outro (Beat loop)' };
+                                            newStructure[newStructure.length-1] = { ...newStructure[newStructure.length-1], description: desc };
                                             onUpdate({ structure: newStructure });
                                        }
                                    }
                                }}
                         /> 
-                        DJ Friendly Outro (Mixable Loop)
+                        Ending Fairy Outro (엔딩 요정 / 페이드 아웃)
                     </label>
                     
                     <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#1f2937', borderRadius: '6px' }}>
-                        <label style={{ display: 'block', fontSize: '12px', color: legibilityMode ? '#FFFFFF' : '#9ca3af', marginBottom: '5px' }}>DJ/Producer Name (가사에 포함)</label>
+                        <label style={{ display: 'block', fontSize: '12px', color: legibilityMode ? '#FFFFFF' : '#9ca3af', marginBottom: '5px' }}>DJ/Producer Name (시그니처 태그)</label>
                         <div style={{ display: 'flex', gap: '5px', marginBottom: '8px' }}>
                             <input 
                                 type="text" 
                                 value={project.djName || ''}
                                 onChange={(e) => onUpdate({ djName: e.target.value })}
-                                placeholder="예: DJ Seoul (입력시 Intro에 시그니처 반영)"
+                                placeholder="예: DJ Seoul, Brave Sound (입력시 Intro에 반영)"
                                 style={{ flex: 1, padding: '8px', backgroundColor: '#374151', border: 'none', color: 'white', borderRadius: '4px', fontSize: '13px', boxSizing: 'border-box' }}
                             />
                             <button 
@@ -400,7 +402,7 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
                             ))}
                         </div>
                         
-                        <p style={{ fontSize: '11px', color: '#6b7280', margin: '8px 0 0 0' }}>* 이름을 입력하면 가사 생성 시 Intro 또는 Outro 중 한 곳에만 "JYP!" 처럼 시그니처 사운드가 추가됩니다.</p>
+                        <p style={{ fontSize: '11px', color: '#6b7280', margin: '8px 0 0 0' }}>* 이름을 입력하고 체크박스를 켜면 Intro 블록에 시그니처 사운드 태그가 자동 추가됩니다.</p>
                     </div>
                 </div>
             </div>

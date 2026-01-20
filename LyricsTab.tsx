@@ -9,7 +9,8 @@ import { INTRO_STYLES, EXCLUDED_KEYWORDS_PRESETS } from './constants';
 const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState('Korean & English Mix');
-  const [lyricLength, setLyricLength] = useState('Standard (~3:00)');
+  // Changed from string selector to numeric seconds (default 3:00 = 180s)
+  const [lyricDurationSeconds, setLyricDurationSeconds] = useState(180);
   const [isDanceMode, setIsDanceMode] = useState(false);
   const [autoAdjustLength, setAutoAdjustLength] = useState(false);
   
@@ -38,6 +39,12 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
         }
     }
   }, []);
+
+  const formatTime = (seconds: number) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
   const currentExcluded = project.excludedThemes 
     ? project.excludedThemes.split(',').map(s => s.trim()).filter(s => s !== '') 
@@ -91,7 +98,8 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
     setLoading(true);
     try {
         const structureText = project.structure.map((s: SongBlock) => `[${s.type}]: ${s.description}`).join('\n');
-        
+        const formattedDuration = formatTime(lyricDurationSeconds);
+
         let introInstruction = '';
         if (project.introStyle) {
             const style = INTRO_STYLES.find(s => s.id === project.introStyle);
@@ -141,7 +149,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
           Style Description: ${project.styleDescription || 'Standard style'}.
           BPM: ${project.bpm || 95}
           Language Preference: ${language}.
-          Target Duration: ${lyricLength}.
+          Target Duration: Approximately ${formattedDuration}.
           
           CRITICAL: Follow this Structure strictly in this exact order:
           ${structureText}
@@ -155,7 +163,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
 
           Instructions:
           - Reflect the "Style Description" in the choice of words and emotional tone.
-          ${autoAdjustLength ? `- Target Duration is ${lyricLength}. STRICTLY Adjust the number of lines and stanza length accordingly to match the duration.` : `- Target Duration is ${lyricLength}.`}
+          ${autoAdjustLength ? `- Target Duration is ${formattedDuration}. STRICTLY Adjust the number of lines and stanza length accordingly to match the duration.` : `- Target Duration is ${formattedDuration}.`}
           - Output MUST strictly match the defined structure blocks. Generate lyrics for EVERY block in the list.
           - Output format: Include the structure tags (e.g., [Verse 1]) before the lyrics for each block.
           
@@ -303,18 +311,32 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
                     <option>Spanish & English (Latin)</option>
                 </select>
             </div>
+            
+            {/* Range Slider for Duration */}
             <div>
-                 <label style={{ display: 'block', fontSize: '13px', color: labelColor, marginBottom: '5px' }}>길이 (Duration)</label>
-                 <select 
-                    value={lyricLength} 
-                    onChange={e => setLyricLength(e.target.value)}
-                    style={{ width: '100%', padding: '10px', backgroundColor: '#374151', color: 'white', border: 'none', borderRadius: '6px', fontSize: '13px' }}
-                >
-                    <option value="Short (~2:00)">Short (~2:00)</option>
-                    <option value="Standard (~3:00)">Standard (~3:00)</option>
-                    <option value="Long (~4:00)">Long (~4:00)</option>
-                    <option value="Epic (~5:00+)">Epic (~5:00+)</option>
-                 </select>
+                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label style={{ fontSize: '13px', color: labelColor }}>길이 (Duration)</label>
+                    <span style={{ fontSize: '13px', color: '#fbbf24', fontWeight: 'bold', backgroundColor: 'rgba(251, 191, 36, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
+                        {formatTime(lyricDurationSeconds)}
+                    </span>
+                 </div>
+                 <div style={{ padding: '10px', backgroundColor: '#374151', borderRadius: '6px' }}>
+                    <input 
+                        type="range" 
+                        min="120" 
+                        max="300" 
+                        step="30" 
+                        value={lyricDurationSeconds}
+                        onChange={(e) => setLyricDurationSeconds(parseInt(e.target.value))}
+                        style={{ width: '100%', cursor: 'pointer', accentColor: '#e11d48', height: '6px' }} 
+                    />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#9ca3af', marginTop: '5px' }}>
+                        <span>2:00</span>
+                        <span>3:00</span>
+                        <span>4:00</span>
+                        <span>5:00</span>
+                    </div>
+                 </div>
             </div>
             
             {/* Toggles */}
