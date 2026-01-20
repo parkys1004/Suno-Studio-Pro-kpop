@@ -9,7 +9,10 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
   const [loadingPacks, setLoadingPacks] = useState(false);
   const [loadingTitles, setLoadingTitles] = useState(false);
   const [loadingReferences, setLoadingReferences] = useState(false);
-  const [themePacks, setThemePacks] = useState<ThemePack[]>([]);
+  
+  // Use persistent project data for theme packs
+  const themePacks = project.generatedThemePacks || [];
+  
   const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
   const [referenceSuggestions, setReferenceSuggestions] = useState<ReferenceSuggestion[]>([]);
   const [ideaKeywords, setIdeaKeywords] = useState('');
@@ -55,7 +58,8 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
         });
 
         const data = JSON.parse(response.text || '[]');
-        setThemePacks(data);
+        // Save to project state to persist across tabs
+        onUpdate({ generatedThemePacks: data });
     } catch (e) {
         console.error(e);
         alert('아이디어 팩 생성 중 오류가 발생했습니다.');

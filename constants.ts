@@ -46,13 +46,18 @@ export const INSTRUMENTS = [
 ];
 
 export const INTRO_STYLES = [
-  { id: '1', label: '속삭임 (Whisper/Narration)', desc: '아이돌 곡 시그니처. 멤버의 속삭임이나 나레이션으로 시작해 팬들의 이목 집중.', sunoTags: '[Whisper Intro], [Narration], [Member Name Shoutout]' },
+  { id: '1', label: '속삭임 (Whisper)', desc: '아이돌 곡 시그니처. 멤버의 속삭임이나 나레이션으로 시작해 팬들의 이목 집중.', sunoTags: '[Whisper Intro], [Narration], [Member Name Shoutout]' },
   { id: '2', label: '강렬한 비트 (Impact)', desc: '시작하자마자 강한 베이스와 킥으로 때려박는 스타일. 걸크러쉬/다크 컨셉.', sunoTags: '[Heavy 808 Bass], [Explosive Intro], [Trap Beat Start]' },
   { id: '3', label: '감성 피아노 (Emotional)', desc: '잔잔한 피아노 선율로 시작. 발라드나 드라마 OST 도입부 느낌.', sunoTags: '[Melodic Piano Intro], [Soft Atmosphere], [Emotional Start]' },
   { id: '4', label: '국악기 독주 (Fusion)', desc: '가야금이나 해금의 독주로 시작하여 한국적인 미를 강조.', sunoTags: '[Gayageum Solo], [Haegeum Melody], [Traditional Korean Intro]' },
   { id: '5', label: '카운트다운 (Count-in)', desc: 'One, Two, Three! 힘찬 카운트와 함께 밴드 사운드 혹은 댄스 브레이크 시작.', sunoTags: '[Spoken Count-in], [Energetic Start], [Band Hit]' },
   { id: '6', label: '레트로 신스 (City Pop)', desc: '80년대 느낌의 신디사이저와 드럼 머신. 몽환적이고 세련된 도입부.', sunoTags: '[Retro Synth Intro], [City Pop Vibe], [80s Drum Machine]' },
-  { id: '7', label: '아카펠라/코러스 (Harmony)', desc: '악기 없이 보컬 화음으로 시작하여 목소리에 집중.', sunoTags: '[Acapella Intro], [Vocal Harmony], [Choir Start]' }
+  { id: '7', label: '아카펠라/코러스 (Harmony)', desc: '악기 없이 보컬 화음으로 시작하여 목소리에 집중.', sunoTags: '[Acapella Intro], [Vocal Harmony], [Choir Start]' },
+  { id: '8', label: '통화 연결음 (Phone FX)', desc: '따르릉 소리, 부재중 메시지 녹음 등 현실적인 효과음으로 스토리텔링 시작.', sunoTags: '[Phone Ringtone SFX], [Voicemail Intro], [Lo-fi Filter]' },
+  { id: '9', label: '뉴스/라디오 (Broadcast)', desc: '뉴스 속보나 라디오 채널을 돌리는 듯한 지직거리는 소리. 컨셉츄얼한 곡.', sunoTags: '[Radio Tuning SFX], [News Breaking Intro], [Static Noise]' },
+  { id: '10', label: '기타 솔로 (Guitar Riff)', desc: '매력적인 기타 리프(Riff) 하나로 시작하여 분위기를 장악.', sunoTags: '[Electric Guitar Riff], [Acoustic Guitar Solo], [Funky Guitar Intro]' },
+  { id: '11', label: '자연의 소리 (Ambience)', desc: '빗소리, 파도 소리, 도시의 소음 등 공간감을 주는 배경음으로 시작.', sunoTags: '[Rain Sound], [Ocean Waves], [City Ambience Intro]' },
+  { id: '12', label: '사이렌/알람 (Tension)', desc: '위급한 사이렌이나 알람 소리로 긴장감을 고조시키며 강렬하게 시작.', sunoTags: '[Siren SFX], [Alarm Sound], [Emergency Intro]' }
 ];
 
 export const EXCLUDED_KEYWORDS_PRESETS = [

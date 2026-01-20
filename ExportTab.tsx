@@ -8,6 +8,7 @@ const MetadataDraftForm = ({ project, onCancel, legibilityMode }: any) => {
     const [artist, setArtist] = useState(project.djName || 'DJ Doberman');
     const [artistSamples, setArtistSamples] = useState<string[]>(['DJ Doberman']);
     const [generatedTags, setGeneratedTags] = useState<string>('');
+    const [isCleanMode, setIsCleanMode] = useState(false);
 
     useEffect(() => {
         const saved = localStorage.getItem('suno_export_artists');
@@ -16,7 +17,9 @@ const MetadataDraftForm = ({ project, onCancel, legibilityMode }: any) => {
 
     useEffect(() => {
         const baseTags = [project.genre, project.subGenre, project.mood, 'NewMusic', 'SunoAI', 'AI_Music', project.vocalType];
-        const formattedTags = baseTags.map(t => `#${t.replace(/\s+/g, '')}`).join(' ');
+        // Remove empty or undefined values and duplicates
+        const uniqueTags = Array.from(new Set(baseTags.filter(t => t)));
+        const formattedTags = uniqueTags.map(t => `#${t.replace(/\s+/g, '')}`).join(' ');
         setGeneratedTags(formattedTags);
     }, [project]);
 
@@ -36,8 +39,36 @@ const MetadataDraftForm = ({ project, onCancel, legibilityMode }: any) => {
         saveArtistSamples(artistSamples.filter(a => a !== name));
     };
 
+    const getCleanedLyrics = (text: string) => {
+        if (!text) return '';
+        // 1. Remove structure tags [Verse], [Chorus], etc.
+        let cleaned = text.replace(/\[.*?\]/g, '');
+        // 2. Remove dance counts like (8), (4)
+        cleaned = cleaned.replace(/\(\d+\)/g, '');
+        // 3. Normalize newlines: remove excessive blank lines
+        // Split by lines, trim each line
+        const lines = cleaned.split('\n').map(l => l.trim());
+        // Filter out lines that were just tags (now empty), but preserve paragraph breaks
+        // Strategy: Reduce multiple empty lines to a single empty line
+        const result = lines.reduce((acc, line) => {
+            if (line === '' && acc[acc.length - 1] === '') {
+                return acc; // Skip multiple empty lines
+            }
+            acc.push(line);
+            return acc;
+        }, [] as string[]);
+        
+        // Remove leading/trailing empty lines
+        if (result.length > 0 && result[0] === '') result.shift();
+        if (result.length > 0 && result[result.length - 1] === '') result.pop();
+        
+        return result.join('\n');
+    };
+
+    const displayLyrics = isCleanMode ? getCleanedLyrics(project.lyrics || '') : (project.lyrics || '');
+
     const copyAll = () => {
-        const text = `Title: ${project.title}\nArtist: ${artist}\n\n[Tags]\n${generatedTags}\n\n[Lyrics]\n${project.lyrics || '(No lyrics generated)'}`.trim();
+        const text = `Title: ${project.title}\nArtist: ${artist}\n\n[Tags]\n${generatedTags}\n\n[Lyrics]\n${displayLyrics}`.trim();
         navigator.clipboard.writeText(text);
         alert('🎵 메타데이터 초안이 복사되었습니다!');
     };
@@ -78,15 +109,40 @@ const MetadataDraftForm = ({ project, onCancel, legibilityMode }: any) => {
                                 ))}
                             </div>
                         </div>
+                        {/* Tags Section */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <label style={{ display: 'block', color: labelColor, fontSize: '13px', marginBottom: '5px' }}>태그 (Tags)</label>
+                            <textarea 
+                                value={generatedTags} 
+                                readOnly 
+                                style={{ 
+                                    width: '100%', padding: '10px', backgroundColor: '#374151', 
+                                    border: '1px solid #4b5563', color: '#9ca3af', borderRadius: '6px', 
+                                    boxSizing: 'border-box', resize: 'none', height: '80px', fontSize: '12px',
+                                    lineHeight: '1.5'
+                                }} 
+                            />
+                        </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ display: 'block', color: labelColor, fontSize: '13px', marginBottom: '5px' }}>가사 (Lyrics)</label>
-                        <textarea value={project.lyrics || ''} readOnly style={{ flex: 1, padding: '10px', backgroundColor: '#374151', border: '1px solid #4b5563', color: '#e5e7eb', borderRadius: '6px', resize: 'none', fontFamily: 'monospace', minHeight: '300px', boxSizing: 'border-box' }} />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+                            <label style={{ display: 'block', color: labelColor, fontSize: '13px' }}>가사 (Lyrics)</label>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#10b981', cursor: 'pointer' }}>
+                                <input 
+                                    type="checkbox" 
+                                    checked={isCleanMode} 
+                                    onChange={(e) => setIsCleanMode(e.target.checked)} 
+                                    style={{ accentColor: '#10b981' }}
+                                />
+                                태그 제외 (Pure Text)
+                            </label>
+                        </div>
+                        <textarea value={displayLyrics} readOnly style={{ flex: 1, padding: '10px', backgroundColor: '#374151', border: '1px solid #4b5563', color: '#e5e7eb', borderRadius: '6px', resize: 'none', fontFamily: 'monospace', minHeight: '300px', boxSizing: 'border-box' }} />
                     </div>
                 </div>
                 <div style={{ marginTop: '30px', textAlign: 'center' }}>
                     <button onClick={copyAll} style={{ padding: '12px 30px', backgroundColor: '#e11d48', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                        <span className="material-symbols-outlined">content_copy</span> 전체 복사 (Copy All)
+                        <span className="material-symbols-outlined">content_copy</span> {isCleanMode ? '순수 가사 복사 (Copy Lyrics)' : '전체 복사 (Copy All)'}
                     </button>
                 </div>
             </div>

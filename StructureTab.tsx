@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Project, SongBlock } from './types';
 import { BLOCK_SAMPLES, STRUCTURE_TEMPLATES, INTRO_STYLES } from './constants';
 
@@ -68,6 +68,34 @@ const TEMPLATE_CATEGORIES: Record<string, string[]> = {
 const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
   // Use persisted template or default to 'Custom'
   const selectedTemplate = project.selectedStructureTemplate || 'Custom';
+  const [savedDjNames, setSavedDjNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('suno_dj_names');
+    if (saved) {
+        try {
+            setSavedDjNames(JSON.parse(saved));
+        } catch(e) { console.error(e); }
+    } else {
+        setSavedDjNames(['DJ Seoul', 'Brave Brothers', 'JYP']);
+    }
+  }, []);
+
+  const handleSaveDjName = () => {
+    const name = project.djName?.trim();
+    if (name && !savedDjNames.includes(name)) {
+        const updated = [...savedDjNames, name];
+        setSavedDjNames(updated);
+        localStorage.setItem('suno_dj_names', JSON.stringify(updated));
+    }
+  };
+
+  const handleDeleteDjName = (e: React.MouseEvent, name: string) => {
+    e.stopPropagation();
+    const updated = savedDjNames.filter(n => n !== name);
+    setSavedDjNames(updated);
+    localStorage.setItem('suno_dj_names', JSON.stringify(updated));
+  };
 
   // Calculate uncategorized templates (safety net)
   const allCategorized = Object.values(TEMPLATE_CATEGORIES).flat();
@@ -331,29 +359,48 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
                     
                     <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#1f2937', borderRadius: '6px' }}>
                         <label style={{ display: 'block', fontSize: '12px', color: legibilityMode ? '#FFFFFF' : '#9ca3af', marginBottom: '5px' }}>DJ/Producer Name (가사에 포함)</label>
-                        <input 
-                            type="text" 
-                            value={project.djName || ''}
-                            onChange={(e) => onUpdate({ djName: e.target.value })}
-                            placeholder="예: DJ Seoul (입력시 Intro에 시그니처 반영)"
-                            style={{ width: '100%', padding: '8px', backgroundColor: '#374151', border: 'none', color: 'white', borderRadius: '4px', fontSize: '13px', boxSizing: 'border-box' }}
-                        />
-                        <div style={{ marginTop: '8px' }}>
-                           <button 
-                               onClick={() => onUpdate({ djName: 'Brave Brothers' })}
-                               style={{ 
-                                   background: 'transparent', border: '1px solid #4b5563', borderRadius: '12px', 
-                                   color: legibilityMode ? '#FFFFFF' : '#9ca3af', padding: '4px 10px', fontSize: '11px', cursor: 'pointer',
-                                   transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '5px'
-                               }}
-                               onMouseEnter={(e) => {e.currentTarget.style.borderColor = '#e11d48'; e.currentTarget.style.color = '#e11d48';}}
-                               onMouseLeave={(e) => {e.currentTarget.style.borderColor = '#4b5563'; e.currentTarget.style.color = legibilityMode ? '#FFFFFF' : '#9ca3af';}}
-                           >
-                               <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>smart_toy</span>
-                               Apply "Brave Brothers" Style
-                           </button>
+                        <div style={{ display: 'flex', gap: '5px', marginBottom: '8px' }}>
+                            <input 
+                                type="text" 
+                                value={project.djName || ''}
+                                onChange={(e) => onUpdate({ djName: e.target.value })}
+                                placeholder="예: DJ Seoul (입력시 Intro에 시그니처 반영)"
+                                style={{ flex: 1, padding: '8px', backgroundColor: '#374151', border: 'none', color: 'white', borderRadius: '4px', fontSize: '13px', boxSizing: 'border-box' }}
+                            />
+                            <button 
+                                onClick={handleSaveDjName}
+                                title="현재 이름을 리스트에 저장"
+                                style={{ padding: '0 10px', backgroundColor: '#374151', border: '1px solid #4b5563', color: '#10b981', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span>
+                            </button>
                         </div>
-                        <p style={{ fontSize: '11px', color: '#6b7280', margin: '4px 0 0 0' }}>* 이름을 입력하면 가사 생성 시 Intro 또는 Outro 중 한 곳에만 "JYP!" 처럼 시그니처 사운드가 추가됩니다.</p>
+
+                        {/* Saved Tags */}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                            {savedDjNames.map((name, idx) => (
+                                <div 
+                                    key={idx} 
+                                    onClick={() => onUpdate({ djName: name })}
+                                    style={{ 
+                                        fontSize: '11px', padding: '4px 8px', borderRadius: '12px', 
+                                        backgroundColor: '#111827', border: '1px solid #4b5563', 
+                                        color: legibilityMode ? '#FFFFFF' : '#d1d5db', cursor: 'pointer', 
+                                        display: 'flex', alignItems: 'center', gap: '4px' 
+                                    }}
+                                >
+                                    {name} 
+                                    <span 
+                                        onClick={(e) => handleDeleteDjName(e, name)} 
+                                        style={{ fontSize: '14px', color: '#ef4444', fontWeight: 'bold', display: 'flex', alignItems: 'center' }}
+                                    >
+                                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>close</span>
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        <p style={{ fontSize: '11px', color: '#6b7280', margin: '8px 0 0 0' }}>* 이름을 입력하면 가사 생성 시 Intro 또는 Outro 중 한 곳에만 "JYP!" 처럼 시그니처 사운드가 추가됩니다.</p>
                     </div>
                 </div>
             </div>

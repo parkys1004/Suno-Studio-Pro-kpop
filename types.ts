@@ -1,6 +1,4 @@
 
-
-
 export type ViewState = 'DASHBOARD' | 'STUDIO';
 export type StudioTab = 'CONCEPT' | 'STRUCTURE' | 'LYRICS' | 'SOUND' | 'ART' | 'EXPORT';
 
@@ -45,6 +43,7 @@ export interface Project {
   // Generated Content
   concept?: string;
   generatedTitles: string[];
+  generatedThemePacks?: ThemePack[]; // Persist AI Idea Packs
   structure: SongBlock[];
   lyrics: string;
   excludedThemes?: string;

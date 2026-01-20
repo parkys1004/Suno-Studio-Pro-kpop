@@ -40,7 +40,7 @@ const Studio = ({ project, onUpdate, onBack, onExportJSON, legibilityMode }: { p
         
         {/* NEW FOOTER */}
         <div className="sidebar-footer" style={{ marginTop: 'auto', marginBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
-             <a href="https://kmong.com/gig/730531" target="_blank" rel="noreferrer" 
+             <a href="https://kmong.com/self-marketing/730531/ZQh4nXZpK5" target="_blank" rel="noreferrer" 
                 style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                 title="크몽에서 전문가 만나기"
              >
