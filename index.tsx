@@ -40,7 +40,13 @@ const App = () => {
             lyrics: '',
             sunoPrompt: '',
             instruments: GENRE_DEFAULTS[form.genre] || [],
-            vocalType: 'Male'
+            vocalType: 'Male',
+            // Default Lyric Settings
+            lyricLanguage: 'Korean & English Mix',
+            lyricDuration: 180,
+            lyricDanceMode: false,
+            lyricAutoAdjust: false,
+            selectedSoundPreset: '' // Default empty preset
         };
         const updated = [newProject, ...projects];
         setProjects(updated);

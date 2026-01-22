@@ -55,11 +55,18 @@ export interface Project {
   lyricVariations?: {title: string, lyrics: string, rationale: string}[];
   selectedLyricVariationIndex?: number | null;
 
+  // Lyric Settings Persistence (New)
+  lyricLanguage?: string;
+  lyricDuration?: number;
+  lyricDanceMode?: boolean;
+  lyricAutoAdjust?: boolean;
+
   // Settings
   instruments: string[];
   vocalType: string;
   djName?: string;
   introStyle?: string;
+  selectedSoundPreset?: string; // Persist Sound Preset Selection
 
   // Structure Template Persistence
   selectedStructureTemplate?: string;

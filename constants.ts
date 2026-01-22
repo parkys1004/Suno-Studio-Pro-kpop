@@ -1,4 +1,5 @@
 
+
 export const GENRES = [
   { label: 'K-Pop', subgenres: ['Girl Crush', 'Refreshing', 'High Teen', 'Dark Concept', 'Jersey Club', 'Easy Listening', 'Afrobeats'] },
   { label: 'Ballad', subgenres: ['Traditional Ballad', 'Rock Ballad', 'R&B Ballad', 'Indie Ballad'] },
@@ -452,7 +453,7 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Outro', description: 'Sudden Silence', duration: 4 }
   ],
 
-  // --- INDIE & ACOUSTIC (5) ---
+  // --- INDIE & ACOUSTIC (6) - Updated with Piano Solo ---
   'Acoustic Indie': [
       { type: 'Intro', description: 'Guitar Arpeggio', duration: 8 },
       { type: 'Verse', description: 'Soft Whispering', duration: 16 },
@@ -492,8 +493,15 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Verse', description: 'Chimes & Bells', duration: 16 },
       { type: 'Outro', description: 'Slow Fade to Silence', duration: 16 }
   ],
+  'Piano Solo (Calm)': [
+      { type: 'Intro', description: 'Gentle Arpeggio', duration: 8 },
+      { type: 'Verse', description: 'Main Theme A', duration: 16 },
+      { type: 'Chorus', description: 'Variation B', duration: 16 },
+      { type: 'Verse', description: 'Main Theme A (Variation)', duration: 16 },
+      { type: 'Outro', description: 'Slowing down', duration: 8 }
+  ],
 
-  // --- PARTY & EDM (5) ---
+  // --- PARTY & EDM (7) - Updated with House & Future Bass ---
   'Festival / EDM': [
       { type: 'Intro', description: 'Build Up Riser', duration: 16 },
       { type: 'Drop', description: 'Big Room Drop (Jump!)', duration: 16 },
@@ -519,6 +527,23 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Drop', description: 'Full Energy', duration: 16 },
       { type: 'Outro', description: 'Beat Fade', duration: 8 }
   ],
+  'House (Club Standard)': [
+      { type: 'Intro', description: 'DJ Intro (Beat mix)', duration: 16 },
+      { type: 'Verse', description: 'Vocal Build', duration: 16 },
+      { type: 'Chorus', description: 'Drop (Main Groove)', duration: 16 },
+      { type: 'Verse', description: 'Breakdown', duration: 8 },
+      { type: 'Chorus', description: 'Drop', duration: 16 },
+      { type: 'Outro', description: 'DJ Outro', duration: 16 }
+  ],
+  'Future Bass (Emotional)': [
+      { type: 'Intro', description: 'Synth Chords', duration: 8 },
+      { type: 'Verse', description: 'Soft Vocals', duration: 16 },
+      { type: 'Bridge', description: 'Snare Build Up', duration: 8 },
+      { type: 'Drop', description: 'Wobbly Chords (Super Saw)', duration: 16 },
+      { type: 'Outro', description: 'Fade', duration: 8 }
+  ],
+
+  // --- BAND & ROCK (6) - Updated with Modern Rock ---
   'Heavy Metal (Breakdown)': [
       { type: 'Intro', description: 'Guitar Feedback & Scream', duration: 4 },
       { type: 'Verse', description: 'Aggressive Riff', duration: 16 },
@@ -534,6 +559,42 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Verse', description: 'Verse 2', duration: 8 },
       { type: 'Chorus', description: 'Anthemic Shout', duration: 8 },
       { type: 'Outro', description: 'Feedback', duration: 4 }
+  ],
+  'Modern Rock (Anthem)': [
+      { type: 'Intro', description: 'Guitar Riff', duration: 8 },
+      { type: 'Verse', description: 'Bass & Drums driven', duration: 16 },
+      { type: 'Chorus', description: 'Explosive Energy', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Bridge', description: 'Slow down & Build', duration: 8 },
+      { type: 'Chorus', description: 'Final Chorus', duration: 16 },
+      { type: 'Outro', description: 'Guitar Feedback', duration: 8 }
+  ],
+
+  // --- JAZZ & TROT (4) - Updated with Trot and Bossa ---
+  'Traditional Trot (Ppong-jak)': [
+      { type: 'Intro', description: 'Accordion & Brass', duration: 8 },
+      { type: 'Verse', description: 'Verse 1 (Emotional)', duration: 16 },
+      { type: 'Chorus', description: 'Main Melody (Ppong-jak Rhythm)', duration: 16 },
+      { type: 'Instrumental', description: 'Brass Solo', duration: 16 },
+      { type: 'Verse', description: 'Verse 2', duration: 16 },
+      { type: 'Chorus', description: 'Main Melody', duration: 16 },
+      { type: 'Outro', description: 'Grand Finale', duration: 8 }
+  ],
+  'Bossa Nova (Cafe)': [
+      { type: 'Intro', description: 'Nylon Guitar & Shaker', duration: 8 },
+      { type: 'Verse', description: 'Soft Whisper Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Melodic Hook', duration: 16 },
+      { type: 'Instrumental', description: 'Flute or Piano Solo', duration: 16 },
+      { type: 'Chorus', description: 'Melodic Hook', duration: 16 },
+      { type: 'Outro', description: 'Humming Fade', duration: 8 }
+  ],
+  'Jazz Bar (Solo)': [
+      { type: 'Intro', description: 'Double Bass & Brush Drum', duration: 8 },
+      { type: 'Verse', description: 'Soulful Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
+      { type: 'Instrumental', description: 'Piano Improvisation', duration: 16 },
+      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
+      { type: 'Outro', description: 'Scat Singing', duration: 8 }
   ],
 
   // --- SHORT FORM (3) ---
@@ -555,7 +616,7 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Outro', description: 'Ding!', duration: 2 }
   ],
 
-  // --- FUSION & SPECIAL (3) ---
+  // --- FUSION & SPECIAL (2) ---
   'Fusion Gugak (Joseon Pop)': [
       { type: 'Intro', description: 'Gayageum Riff', duration: 8 },
       { type: 'Verse', description: 'Pansori Style Vocals', duration: 16 },
@@ -564,14 +625,6 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Verse', description: 'Rap Verse', duration: 16 },
       { type: 'Chorus', description: 'Main Hook', duration: 16 },
       { type: 'Outro', description: 'Kwaenggwari Ending', duration: 8 }
-  ],
-  'Jazz Bar (Solo)': [
-      { type: 'Intro', description: 'Double Bass & Brush Drum', duration: 8 },
-      { type: 'Verse', description: 'Soulful Vocals', duration: 16 },
-      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
-      { type: 'Instrumental', description: 'Piano Improvisation', duration: 16 },
-      { type: 'Chorus', description: 'Swing Rhythm', duration: 16 },
-      { type: 'Outro', description: 'Scat Singing', duration: 8 }
   ],
   'Neo-Soul (Groovy)': [
       { type: 'Intro', description: 'Laid back drum beat', duration: 8 },

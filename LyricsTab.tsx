@@ -8,11 +8,12 @@ import { INTRO_STYLES, EXCLUDED_KEYWORDS_PRESETS } from './constants';
 // --- TAB: Lyrics ---
 const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState('Korean & English Mix');
-  // Changed from string selector to numeric seconds (default 3:00 = 180s)
-  const [lyricDurationSeconds, setLyricDurationSeconds] = useState(180);
-  const [isDanceMode, setIsDanceMode] = useState(false);
-  const [autoAdjustLength, setAutoAdjustLength] = useState(false);
+  
+  // State is now derived from project prop for persistence
+  const language = project.lyricLanguage ?? 'Korean & English Mix';
+  const lyricDurationSeconds = project.lyricDuration ?? 180;
+  const isDanceMode = project.lyricDanceMode ?? false;
+  const autoAdjustLength = project.lyricAutoAdjust ?? false;
   
   // Use persistent project data for variations instead of local state
   const variations = project.lyricVariations || [];
@@ -300,7 +301,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
                 <label style={{ display: 'block', fontSize: '13px', color: labelColor, marginBottom: '5px' }}>언어 (Language)</label>
                 <select 
                     value={language} 
-                    onChange={e => setLanguage(e.target.value)}
+                    onChange={e => onUpdate({ lyricLanguage: e.target.value })}
                     style={{ width: '100%', padding: '10px', backgroundColor: '#374151', color: 'white', border: 'none', borderRadius: '6px', fontSize: '13px' }}
                 >
                     <option>Korean & English Mix</option>
@@ -327,7 +328,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
                         max="300" 
                         step="30" 
                         value={lyricDurationSeconds}
-                        onChange={(e) => setLyricDurationSeconds(parseInt(e.target.value))}
+                        onChange={(e) => onUpdate({ lyricDuration: parseInt(e.target.value) })}
                         style={{ width: '100%', cursor: 'pointer', accentColor: '#e11d48', height: '6px' }} 
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#9ca3af', marginTop: '5px' }}>
@@ -341,7 +342,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
             
             {/* Toggles */}
             <div 
-                onClick={() => setIsDanceMode(!isDanceMode)}
+                onClick={() => onUpdate({ lyricDanceMode: !isDanceMode })}
                 style={{ padding: '12px', backgroundColor: '#1f2937', borderRadius: '8px', border: isDanceMode ? '1px solid #10b981' : '1px solid #374151', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
             >
                 <div style={{ fontSize: '13px', fontWeight: 'bold', color: isDanceMode ? '#10b981' : (legibilityMode ? '#FFFFFF' : '#f9fafb') }}>Dance Mode (8-count)</div>
@@ -351,7 +352,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
             </div>
 
             <div 
-                onClick={() => setAutoAdjustLength(!autoAdjustLength)}
+                onClick={() => onUpdate({ lyricAutoAdjust: !autoAdjustLength })}
                 style={{ padding: '12px', backgroundColor: '#1f2937', borderRadius: '8px', border: autoAdjustLength ? '1px solid #fbbf24' : '1px solid #374151', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
             >
                 <div style={{ fontSize: '13px', fontWeight: 'bold', color: autoAdjustLength ? '#fbbf24' : (legibilityMode ? '#FFFFFF' : '#f9fafb') }}>Auto-Length Adjust</div>

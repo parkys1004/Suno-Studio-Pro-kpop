@@ -229,7 +229,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
             Requirement:
             - Create a high-quality comma-separated list of tags and style descriptors.
             - Include genre, mood, key instruments, vocal type, and production style.
-            - Add specific style adjectives (e.g., 'atmospheric', 'heavy', 'uplifting').
+            - Add style adjectives (e.g., 'atmospheric', 'heavy', 'uplifting').
             - Format: "[Tag 1], [Tag 2], [Tag 3], ..."
             - Limit to around 200 characters max.
             `;
@@ -343,9 +343,23 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
               <div style={{ backgroundColor: '#1f2937', padding: '15px', borderRadius: '8px', border: '1px solid #374151' }}>
                   <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', color: labelColor }}>장르 프리셋 (Presets)</label>
                   <select 
+                      value={project.selectedSoundPreset || ''}
                       onChange={(e) => {
-                          const preset = GENRE_PRESETS[project.genre]?.find(p => p.label === e.target.value);
-                          if (preset) applyPreset(preset);
+                          const val = e.target.value;
+                          if (val === "") {
+                             onUpdate({ selectedSoundPreset: "" });
+                             return;
+                          }
+                          const preset = GENRE_PRESETS[project.genre]?.find(p => p.label === val);
+                          if (preset) {
+                             // Combine all updates into a single onUpdate call to prevent race conditions
+                             onUpdate({
+                                 bpm: preset.bpm,
+                                 key: preset.key,
+                                 instruments: preset.instruments || [],
+                                 selectedSoundPreset: val
+                             });
+                          }
                       }}
                       style={{ width: '100%', padding: '10px', backgroundColor: '#111827', color: 'white', border: '1px solid #4b5563', borderRadius: '6px' }}
                   >

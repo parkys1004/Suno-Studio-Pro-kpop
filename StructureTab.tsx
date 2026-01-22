@@ -38,12 +38,36 @@ const TEMPLATE_CATEGORIES: Record<string, string[]> = {
         "Grand Epic (Final)",
         "Movie Trailer (Build-up)"
     ],
-    "☕ Indie & Chill": [
+    "🎸 Band & Rock": [
+        "Modern Rock (Anthem)",
+        "Rock Ballad (Band)",
+        "Punk Rock (Fast)",
+        "Heavy Metal (Breakdown)"
+    ],
+    "⚡ Electronic & House": [
+        "House (Club Standard)",
+        "Future Bass (Emotional)",
+        "Festival / EDM",
+        "Drum & Bass (Liquid)"
+    ],
+    "🎷 Jazz & Trot": [
+        "Traditional Trot (Ppong-jak)",
+        "EDM Trot (Party)",
+        "Bossa Nova (Cafe)",
+        "Jazz Bar (Solo)"
+    ],
+    "🌿 Healing & Acoustic": [
         "Acoustic Indie",
-        "Introvert / Lofi",
         "Acoustic Cafe",
+        "Introvert / Lofi",
         "Shoegaze (Dreamy)",
-        "Ambient / Meditation"
+        "Ambient / Meditation",
+        "Piano Solo (Calm)"
+    ],
+    "📱 Short Form (TikTok/Shorts)": [
+        "Viral Hook Song (Short)",
+        "TikTok Challenge (15s)",
+        "YouTube Intro (Logo)"
     ],
     "🎉 Party & Club": [
         "Festival / EDM",
@@ -52,14 +76,8 @@ const TEMPLATE_CATEGORIES: Record<string, string[]> = {
         "Heavy Metal (Breakdown)",
         "Punk Rock (Fast)"
     ],
-    "📱 Short Form (TikTok/Shorts)": [
-        "Viral Hook Song (Short)",
-        "TikTok Challenge (15s)",
-        "YouTube Intro (Logo)"
-    ],
-    "🎸 Fusion & Special": [
+    "🏮 Fusion & Special": [
         "Fusion Gugak (Joseon Pop)",
-        "Jazz Bar (Solo)",
         "Neo-Soul (Groovy)"
     ]
 };
