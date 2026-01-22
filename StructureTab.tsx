@@ -82,11 +82,139 @@ const TEMPLATE_CATEGORIES: Record<string, string[]> = {
     ]
 };
 
+// --- K-POP Structure Manual Data ---
+const STRUCTURE_MANUAL_DATA = [
+    {
+        title: "1. Intro: 도입부",
+        color: "#fbbf24", // Gold
+        items: [
+            { term: "Whisper Narration (속삭이는 나레이션)", desc: "곡의 시작을 알리는 감각적인 음성" },
+            { term: "Explosive Dance Beat (폭발적인 댄스 비트)", desc: "시작부터 에너지를 터뜨리는 강렬한 리듬" },
+            { term: "Emotional Piano Solo (감성적인 피아노 솔로)", desc: "서정적이고 차분하게 시작하는 선율" },
+            { term: "Gugak Melody (국악 선율/가야금)", desc: "한국적인 색채를 입힌 전통 악기 도입" },
+            { term: "Counting (카운팅)", desc: "\"One, Two, Three!\"와 같이 박자를 맞추며 시작" }
+        ]
+    },
+    {
+        title: "2. Verse: 절",
+        color: "#3b82f6", // Blue
+        items: [
+            { term: "Rhythmic Rap (리드미컬 랩)", desc: "리듬감을 강조한 랩 파트" },
+            { term: "Melodic Singing (낮은 음역대 가창)", desc: "보컬의 매력을 보여주는 중저음 구간" },
+            { term: "Storytelling (스토리텔링)", desc: "곡의 서사와 가사 내용을 전달하는 파트" },
+            { term: "Building Up (빌드업)", desc: "감정과 에너지를 서서히 끌어올리는 과정" },
+            { term: "Groovy Bass Line (그루비한 베이스 라인)", desc: "베이스 악기를 강조해 리듬을 살린 구간" }
+        ]
+    },
+    {
+        title: "3. Chorus: 후렴구",
+        color: "#e11d48", // Rose (Main)
+        items: [
+            { term: "Killing Part/Hook (킬링 파트/훅)", desc: "곡에서 가장 강렬하고 기억에 남는 핵심 지점" },
+            { term: "High Note Explosion (고음 폭발)", desc: "보컬의 가창력을 극대화하는 하이라이트" },
+            { term: "Addictive Repetition (중독적인 반복)", desc: "누구나 따라 부르기 쉬운 반복적인 멜로디와 가사" },
+            { term: "Group Harmony (그룹 화음)", desc: "멤버들의 목소리가 합쳐져 풍성함을 주는 구간" },
+            { term: "Drop/EDM Style (EDM 스타일 드랍)", desc: "보컬 대신 강렬한 비트가 주인공이 되는 구간" }
+        ]
+    },
+    {
+        title: "4. Bridge: 브릿지",
+        color: "#a855f7", // Purple
+        items: [
+            { term: "Mood Change/Slow down (무드 전환)", desc: "곡의 흐름을 잠시 늦추거나 분위기를 바꾸는 구간" },
+            { term: "High Note Ad-lib (고음 애드리브)", desc: "화려한 기교로 긴장감을 고조시키는 보컬" },
+            { term: "Rap Break (랩 브레이크)", desc: "분위기를 환기시키는 강렬한 랩 구간" },
+            { term: "Minimal Instrument (최소화된 악기)", desc: "악기 소리를 줄여 목소리에 집중시키는 기법" },
+            { term: "Build up to Final Chorus (마지막 후렴 빌드업)", desc: "최종 클라이맥스로 가기 전 에너지를 응축하는 단계" }
+        ]
+    },
+    {
+        title: "5. Drop & Instrumental: 퍼포먼스",
+        color: "#10b981", // Green
+        items: [
+            { term: "Dance Break (댄스 브레이크)", desc: "화려한 퍼포먼스와 안무에 집중하는 구간" },
+            { term: "Heavy Bass Drop (헤비 베이스 드랍)", desc: "웅장하고 무거운 저음을 강조한 비트" },
+            { term: "Synth Lead Solo (신스 리드 솔로)", desc: "전자음악 사운드가 주도하는 연주 파트" },
+            { term: "Traditional Percussion Break", desc: "꽹과리, 장구 등 국악 타악기를 활용한 리듬 구간" },
+            { term: "Haegeum Solo (해금 솔로)", desc: "애절하고 독특한 해금 소리를 강조한 간주" }
+        ]
+    },
+    {
+        title: "6. Outro: 종결부",
+        color: "#9ca3af", // Gray
+        items: [
+            { term: "Ending Fairy Pose (엔딩 요정 포즈)", desc: "무대 위 화면을 응시하며 여운을 남기는 마무리" },
+            { term: "High Note Finish (고음 마무리)", desc: "시원한 고음으로 곡을 끝맺는 방식" },
+            { term: "Whisper Ending (속삭이는 엔딩)", desc: "속삭이듯 읊조리며 사라지는 마무리" },
+            { term: "Abrupt Stop (갑작스러운 정지)", desc: "긴장감 있게 뚝 끊기며 끝나는 방식" },
+            { term: "Instrumental Fade (연주 페이드 아웃)", desc: "악기 소리가 점점 작아지며 자연스럽게 종료" }
+        ]
+    }
+];
+
+const StructureManualModal = ({ onClose }: { onClose: () => void }) => {
+    return (
+        <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 5000,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backdropFilter: 'blur(5px)'
+        }} onClick={onClose}>
+            <div style={{
+                backgroundColor: '#1f2937', width: '900px', maxWidth: '95vw', maxHeight: '90vh',
+                borderRadius: '16px', border: '1px solid #374151', display: 'flex', flexDirection: 'column',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', overflow: 'hidden'
+            }} onClick={e => e.stopPropagation()}>
+                {/* Header */}
+                <div style={{ padding: '20px', borderBottom: '1px solid #374151', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#111827' }}>
+                    <h2 style={{ margin: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px' }}>
+                        <span className="material-symbols-outlined" style={{ color: '#fbbf24' }}>menu_book</span>
+                        K-POP 곡 구성 요소 (Song Structure)
+                    </h2>
+                    <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#9ca3af', cursor: 'pointer', display: 'flex' }}>
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div style={{ padding: '25px', overflowY: 'auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '20px', backgroundColor: '#1f2937' }}>
+                    {STRUCTURE_MANUAL_DATA.map((section, idx) => (
+                        <div key={idx} style={{ 
+                            backgroundColor: '#111827', borderRadius: '12px', padding: '15px', 
+                            borderLeft: `4px solid ${section.color}`, boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'
+                        }}>
+                            <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', color: section.color, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                {section.title}
+                            </h3>
+                            <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                                {section.items.map((item, i) => (
+                                    <li key={i} style={{ marginBottom: '8px', fontSize: '13px', lineHeight: '1.5' }}>
+                                        <span style={{ color: '#e5e7eb', fontWeight: 'bold' }}>• {item.term}</span>
+                                        <div style={{ color: '#9ca3af', paddingLeft: '10px', fontSize: '12px' }}>- {item.desc}</div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Footer */}
+                <div style={{ padding: '15px', borderTop: '1px solid #374151', textAlign: 'center', backgroundColor: '#111827' }}>
+                    <button onClick={onClose} style={{ padding: '10px 30px', backgroundColor: '#e11d48', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+                        닫기 (Close)
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // --- TAB: Structure ---
 const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
   // Use persisted template or default to 'Custom'
   const selectedTemplate = project.selectedStructureTemplate || 'Custom';
   const [savedDjNames, setSavedDjNames] = useState<string[]>([]);
+  const [showManual, setShowManual] = useState(false); // Manual Modal State
 
   useEffect(() => {
     const saved = localStorage.getItem('suno_dj_names');
@@ -172,7 +300,23 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
-        <h2 style={{ borderBottom: '1px solid #374151', paddingBottom: '15px', marginBottom: '20px', color: titleColor, fontWeight: legibilityMode ? 'bold' : 'normal' }}>🎹 곡 구조 설계 (Structure Editor)</h2>
+        <h2 style={{ borderBottom: '1px solid #374151', paddingBottom: '15px', marginBottom: '20px', color: titleColor, fontWeight: legibilityMode ? 'bold' : 'normal', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span>🎹 곡 구조 설계 (Structure Editor)</span>
+            <button 
+                onClick={() => setShowManual(true)}
+                style={{
+                    fontSize: '13px', padding: '6px 12px', backgroundColor: '#1f2937', 
+                    border: '1px solid #4b5563', color: '#fbbf24', borderRadius: '6px', 
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+                    fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                }}
+            >
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>menu_book</span>
+                구조 매뉴얼
+            </button>
+        </h2>
+        
+        {showManual && <StructureManualModal onClose={() => setShowManual(false)} />}
         
         <div style={{ marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
             <span style={{ color: legibilityMode ? '#FFFFFF' : '#d1d5db', fontSize: '14px' }}>구조 템플릿 불러오기:</span>

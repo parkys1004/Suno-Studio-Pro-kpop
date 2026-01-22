@@ -167,6 +167,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
           ${autoAdjustLength ? `- Target Duration is ${formattedDuration}. STRICTLY Adjust the number of lines and stanza length accordingly to match the duration.` : `- Target Duration is ${formattedDuration}.`}
           - Output MUST strictly match the defined structure blocks. Generate lyrics for EVERY block in the list.
           - Output format: Include the structure tags (e.g., [Verse 1]) before the lyrics for each block.
+          - Do NOT include metadata headers (Title, BPM, Mood, etc.) in the output. Start directly with the first section tag.
           
           CRITICAL: DANCEABILITY & RHYTHM (Jeong-bak / 정박):
           - The song must have a comfortable, unchanging, steady beat suitable for social dancing.
@@ -214,7 +215,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
             2. For each version, provide:
                - "title": A catchy title.
                - "rationale": A brief description (in Korean) of the style/vibe.
-               - "lyrics": The full lyrics structured with tags like [Verse], [Chorus].
+               - "lyrics": The full lyrics structured with tags like [Verse], [Chorus]. Do NOT include BPM or Metadata headers.
             3. Ensure lyrics are suitable for Suno.ai (musical generation).
             4. CRITICAL: Every version MUST include lyrics for EACH block defined in the structure in the exact order provided. Do not skip blocks or change their order.
             
