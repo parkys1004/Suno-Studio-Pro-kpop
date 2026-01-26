@@ -9,7 +9,7 @@ const Header = ({ view, project, onBack, onSave, onImport, onRemix, legibilityMo
             <div className="header-logo" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={onBack}>
                     <span className="material-symbols-outlined" style={{ fontSize: '24px', color: '#e11d48' }}>piano</span>
-                    <span style={{ fontSize: '18px', fontWeight: 'bold', color: legibilityMode ? '#FFFFFF' : 'white' }}>Suno Studio Pro V1.1</span>
+                    <span style={{ fontSize: '18px', fontWeight: 'bold', color: legibilityMode ? '#FFFFFF' : 'white' }}>Suno Studio Pro V1.5</span>
                 </div>
                 {view === 'STUDIO' && project && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '1px solid #374151', paddingLeft: '15px', marginLeft: '5px' }}>

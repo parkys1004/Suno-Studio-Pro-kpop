@@ -36,7 +36,7 @@ export const ManualModal = ({ onClose }: { onClose: () => void }) => {
             <div style={{ padding: '20px', borderBottom: '1px solid #374151', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ margin: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px' }}>
                     <span className="material-symbols-outlined" style={{ color: '#fbbf24' }}>menu_book</span>
-                    Suno Studio Pro V1.1 사용 매뉴얼
+                    Suno Studio Pro V1.5 사용 매뉴얼
                 </h2>
                 <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#9ca3af', cursor: 'pointer' }}>
                     <span className="material-symbols-outlined">close</span>
