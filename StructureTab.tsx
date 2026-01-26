@@ -373,7 +373,8 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
             ))}
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '20px', alignItems: 'flex-start' }}>
+        {/* Updated: Flex Wrap to remove horizontal scrollbar */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-start', paddingBottom: '20px' }}>
             {project.structure.map((block: SongBlock, i: number) => (
                 <div key={block.id} style={{ 
                     minWidth: '220px', 

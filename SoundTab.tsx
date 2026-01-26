@@ -15,7 +15,6 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
   const [localPrompt, setLocalPrompt] = useState(project.sunoPrompt || '');
   const [isDetectingBPM, setIsDetectingBPM] = useState(false);
   const [sunoVersion, setSunoVersion] = useState<'v3.5' | 'v5'>('v5');
-  const [isDanceGuideOpen, setIsDanceGuideOpen] = useState(false);
   
   // NEW: Prompt Style State (Structured vs Simple)
   const [promptStyle, setPromptStyle] = useState<'structured' | 'simple'>('structured');
@@ -23,17 +22,6 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
   // Custom Instrument Preset State
   const [customInstrumentPresets, setCustomInstrumentPresets] = useState<InstrumentPreset[]>([]);
   const [newPresetName, setNewPresetName] = useState('');
-
-  // Constants specific to SoundTab - UPDATED FOR KPOP
-  const DANCE_GUIDE = [
-    { genre: 'Girl Crush', bpm: '130 - 140', key: 'F#m, C#m', desc: '강렬한 퍼포먼스. 묵직한 베이스 비트 필수.' },
-    { genre: 'Cheongryang (Cool)', bpm: '115 - 126', key: 'C, G, D', desc: '청량한 느낌. 달리기 쉬운 템포.' },
-    { genre: 'K-HipHop / Trap', bpm: '140 - 150', key: 'Am, Gm', desc: '빠른 하이햇과 808 베이스. 스웨그 안무.' },
-    { genre: 'TikTok Challenge', bpm: '128 - 130', key: 'Any', desc: '짧고 반복적인 동작에 최적화된 하우스 리듬.' },
-    { genre: 'Fusion Gugak', bpm: '90 - 110', key: 'Dm, Em', desc: '굿거리 장단이나 자진모리를 현대적으로 해석.' },
-    { genre: 'Ballad (Choreo)', bpm: '70 - 90', key: 'Bb, Eb', desc: '현대무용 스타일의 서정적인 안무.' },
-    { genre: 'Disco / Retro', bpm: '120 - 124', key: 'E, A', desc: '복고풍 댄스. 정박자가 매우 중요.' },
-  ];
 
   useEffect(() => {
       setLocalPrompt(project.sunoPrompt || '');
@@ -331,10 +319,10 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
   const labelColor = legibilityMode ? '#F9FAF8' : '#9ca3af';
 
   return (
-      <div className="responsive-grid-3" style={{ width: '100%', height: 'calc(100vh - 150px)', display: 'grid', gridTemplateColumns: '3fr 2fr 5fr', gap: '20px', minHeight: '600px' }}>
+      <div className="responsive-grid-3" style={{ width: '100%', display: 'grid', gridTemplateColumns: '3fr 2fr 5fr', gap: '20px', minHeight: '600px' }}>
           
           {/* Column 1: Configuration */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '10px', borderRight: '1px solid #374151' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingRight: '10px', borderRight: '1px solid #374151' }}>
               <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: titleColor, display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                   <span className="material-symbols-outlined">settings</span> 설정 (Config)
               </h2>
@@ -434,7 +422,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                   </div>
 
                   <button 
-                    onClick={() => setIsDanceGuideOpen(true)}
+                    onClick={() => window.open('https://k-pop-genre-key-map.vercel.app', '_blank')}
                     style={{ 
                         width: '100%', marginBottom: '15px', padding: '8px', 
                         backgroundColor: '#374151', color: '#fbbf24', border: '1px dashed #4b5563', 
@@ -442,8 +430,8 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
                     }}
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>menu_book</span>
-                    BPM & Key 가이드 보기
+                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>public</span>
+                    K-POP GENRE & KEY
                   </button>
 
                   <div>
@@ -464,7 +452,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
           </div>
 
           {/* Column 2: Instruments & Options */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '10px', borderRight: '1px solid #374151' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingRight: '10px', borderRight: '1px solid #374151' }}>
               <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#e11d48', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                   <span className="material-symbols-outlined">piano</span> 악기 (Instruments)
               </h2>
@@ -532,7 +520,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                     </div>
                   </div>
                   
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxHeight: '150px', overflowY: 'auto' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {customInstrumentPresets.length > 0 ? customInstrumentPresets.map((p, idx) => (
                           <div 
                             key={idx}
@@ -574,7 +562,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
           </div>
 
           {/* Column 3: Output */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#3b82f6', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                   <span className="material-symbols-outlined">auto_awesome</span> 생성 (Prompt)
               </h2>
@@ -697,7 +685,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                         </h3>
                         <div style={{ 
                             fontSize: '13px', color: '#e5e7eb', lineHeight: '1.6', 
-                            maxHeight: '400px', overflowY: 'auto', paddingRight: '10px',
+                            paddingRight: '10px',
                             whiteSpace: 'pre-wrap'
                         }}>
                             {project.compositionAdvice}
@@ -719,7 +707,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                         + Add Custom
                     </button>
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxHeight: '120px', overflowY: 'auto' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {samplePrompts.map((sample, idx) => (
                         <div 
                             key={idx}
@@ -807,56 +795,6 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                             style={{ padding: '8px 16px', backgroundColor: '#e11d48', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
                         >
                             Save Prompt
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )}
-
-        {/* Dance Guide Modal */}
-        {isDanceGuideOpen && (
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000, backdropFilter: 'blur(4px)' }}>
-                <div style={{ backgroundColor: '#1f2937', padding: '24px', borderRadius: '16px', border: '1px solid #374151', width: '600px', maxWidth: '90vw', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #374151', paddingBottom: '10px' }}>
-                        <h3 style={{ margin: 0, fontSize: '18px', color: 'white', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <span className="material-symbols-outlined" style={{ color: '#fbbf24' }}>accessibility_new</span>
-                            BPM & Key 가이드
-                        </h3>
-                        <button onClick={() => setIsDanceGuideOpen(false)} style={{ background: 'transparent', border: 'none', color: '#9ca3af', cursor: 'pointer' }}>
-                            <span className="material-symbols-outlined">close</span>
-                        </button>
-                    </div>
-                    
-                    <div style={{ color: '#d1d5db' }}>
-                        <p style={{ fontSize: '13px', color: labelColor, marginBottom: '15px' }}>
-                            Suno.ai에서 선호하는 음악을 만들기 위한 추천 설정값입니다.
-                        </p>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                            <thead>
-                                <tr style={{ borderBottom: '1px solid #4b5563', color: '#e11d48' }}>
-                                    <th style={{ padding: '10px', textAlign: 'left' }}>장르 (Genre)</th>
-                                    <th style={{ padding: '10px', textAlign: 'left' }}>BPM Range</th>
-                                    <th style={{ padding: '10px', textAlign: 'left' }}>추천 Key</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {DANCE_GUIDE.map((item, idx) => (
-                                    <tr key={idx} style={{ borderBottom: '1px solid #374151' }}>
-                                        <td style={{ padding: '10px', fontWeight: 'bold', color: '#FFFFFF' }}>{item.genre}</td>
-                                        <td style={{ padding: '10px', color: '#fbbf24' }}>{item.bpm}</td>
-                                        <td style={{ padding: '10px', color: '#FFFFFF' }}>{item.key}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                        <button 
-                            onClick={() => setIsDanceGuideOpen(false)}
-                            style={{ padding: '8px 24px', backgroundColor: '#e11d48', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
-                        >
-                            확인 (Close)
                         </button>
                     </div>
                 </div>

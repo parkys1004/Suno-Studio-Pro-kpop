@@ -458,7 +458,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
   const labelColor = legibilityMode ? '#F9FAF8' : '#9ca3af';
 
   return (
-    <div className="lyrics-view" style={{ width: '100%', height: 'calc(100vh - 150px)', display: 'grid', gridTemplateColumns: '320px 360px 1fr', gap: '20px', minHeight: '600px' }}>
+    <div className="lyrics-view" style={{ width: '100%', display: 'grid', gridTemplateColumns: '320px 360px 1fr', gap: '20px', minHeight: '600px' }}>
       
       {/* Optimization Modal */}
       {optimizationResult && (
@@ -471,14 +471,20 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
           />
       )}
 
+      {/* Internal Style for hiding scrollbar locally */}
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
       {/* Column 1: Settings */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '10px' }}>
+      <div className="hide-scrollbar" style={{ display: 'flex', flexDirection: 'column', gap: '15px', paddingRight: '0' }}>
          <h2 style={{ fontSize: '20px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, display:'flex', alignItems:'center', gap:'10px', color: titleColor, fontWeight: legibilityMode ? 'bold' : 'normal' }}>
             <span className="material-symbols-outlined" style={{ color: '#fbbf24' }}>tune</span> 설정 (Settings)
          </h2>
 
          {/* Info Box */}
-         <div style={{ backgroundColor: '#111827', padding: '15px', borderRadius: '8px', border: '1px solid #374151' }}>
+         <div style={{ backgroundColor: '#111827', padding: '12px', borderRadius: '8px', border: '1px solid #374151' }}>
              <p style={{ margin: '0 0 5px 0', fontSize: '12px', color: labelColor }}>현재 스타일</p>
              <p style={{ margin: 0, fontWeight: 'bold', color: '#e11d48', fontSize: '13px', lineHeight: '1.4' }}>
                 {project.styleDescription || '설정된 스타일 없음'}
@@ -496,7 +502,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
          </div>
 
          {/* Controls */}
-         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
              <div>
                 <label style={{ display: 'block', fontSize: '13px', color: labelColor, marginBottom: '5px' }}>언어 (Language)</label>
                 <select 
@@ -726,7 +732,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
       </div>
 
       {/* Column 2: Variations */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', borderLeft: '1px solid #374151', borderRight: '1px solid #374151', padding: '0 20px', overflowY: 'auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', borderLeft: '1px solid #374151', borderRight: '1px solid #374151', padding: '0 20px' }}>
          <h2 style={{ fontSize: '20px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#3b82f6', display:'flex', alignItems:'center', gap:'10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
              <span className="material-symbols-outlined">lightbulb</span> 아이디어 (5 Variations)
          </h2>
@@ -879,7 +885,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
             style={{ 
                 flex: 1, padding: '20px', borderRadius: '8px', backgroundColor: '#111827', 
                 border: '1px solid #374151', color: '#e5e7eb', resize: 'none', lineHeight: '1.6', fontFamily: 'monospace',
-                fontSize: '14px'
+                fontSize: '14px', minHeight: '500px'
             }}
         />
       </div>

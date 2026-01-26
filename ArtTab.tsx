@@ -252,10 +252,10 @@ const ArtTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpd
     const labelColor = legibilityMode ? '#F9FAF8' : '#9ca3af';
 
     return (
-        <div className="responsive-grid-3" style={{ width: '100%', height: 'calc(100vh - 150px)', display: 'grid', gridTemplateColumns: '320px 320px 1fr', gap: '20px', minHeight: '600px' }}>
+        <div className="responsive-grid-3" style={{ width: '100%', display: 'grid', gridTemplateColumns: '320px 320px 1fr', gap: '20px', minHeight: '600px' }}>
             
             {/* Column 1: Concept */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '10px', borderRight: '1px solid #374151' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingRight: '10px', borderRight: '1px solid #374151' }}>
                  <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: titleColor, display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                     <span className="material-symbols-outlined">palette</span> 컨셉 (Concept)
                  </h2>
@@ -342,7 +342,7 @@ const ArtTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpd
             </div>
 
             {/* Column 2: Design */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto', paddingRight: '10px', borderRight: '1px solid #374151' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingRight: '10px', borderRight: '1px solid #374151' }}>
                 <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#818cf8', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                     <span className="material-symbols-outlined">brush</span> 디자인 (Design)
                  </h2>
@@ -448,7 +448,7 @@ const ArtTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpd
             </div>
 
             {/* Column 3: Preview */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                  <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#10b981', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                     <span className="material-symbols-outlined">image</span> 미리보기 (Preview)
                  </h2>
