@@ -414,7 +414,7 @@ const SoundTab = ({ project, onUpdate, legibilityMode }: { project: Project, onU
                                   height: '42px', fontSize: '14px', boxSizing: 'border-box', cursor: 'pointer'
                               }}
                           >
-                               {['C', 'Cm', 'C#', 'C#m', 'D', 'Dm', 'Eb', 'Ebm', 'E', 'Em', 'F', 'Fm', 'F#', 'F#m', 'G', 'Gm', 'Ab', 'Abm', 'A', 'Am', 'Bb', 'Bbm', 'B', 'Bm'].map(k => (
+                               {['C', 'Cm', 'C#', 'C#m', 'D', 'Db', 'Dm', 'Eb', 'Ebm', 'E', 'Em', 'F', 'Fm', 'F#', 'F#m', 'G', 'Gm', 'Ab', 'Abm', 'A', 'Am', 'Bb', 'Bbm', 'B', 'Bm'].map(k => (
                                    <option key={k} value={k}>{k}</option>
                                ))}
                           </select>

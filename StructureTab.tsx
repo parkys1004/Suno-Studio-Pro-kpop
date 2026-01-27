@@ -78,7 +78,10 @@ const TEMPLATE_CATEGORIES: Record<string, string[]> = {
     ],
     "🏮 Fusion & Special": [
         "Fusion Gugak (Joseon Pop)",
-        "Neo-Soul (Groovy)"
+        "Neo-Soul (Groovy)",
+        "Chiptune / 8-bit (Game)",
+        "Tango / Dramatic (Performance)",
+        "Gospel Choir (Uplifting)"
     ]
 };
 

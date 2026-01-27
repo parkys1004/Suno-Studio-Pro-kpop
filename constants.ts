@@ -1,5 +1,6 @@
 
 
+
 export const GENRES = [
   { label: 'K-Pop', subgenres: ['Girl Crush', 'Refreshing', 'High Teen', 'Dark Concept', 'Jersey Club', 'Easy Listening', 'Afrobeats'] },
   { label: 'Ballad', subgenres: ['Traditional Ballad', 'Rock Ballad', 'R&B Ballad', 'Indie Ballad'] },
@@ -616,7 +617,7 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Outro', description: 'Ding!', duration: 2 }
   ],
 
-  // --- FUSION & SPECIAL (2) ---
+  // --- FUSION & SPECIAL (5) ---
   'Fusion Gugak (Joseon Pop)': [
       { type: 'Intro', description: 'Gayageum Riff', duration: 8 },
       { type: 'Verse', description: 'Pansori Style Vocals', duration: 16 },
@@ -632,6 +633,30 @@ export const STRUCTURE_TEMPLATES = {
       { type: 'Chorus', description: 'Smooth Harmony', duration: 16 },
       { type: 'Instrumental', description: 'Organ Solo', duration: 8 },
       { type: 'Outro', description: 'Vocal Ad-libs fade', duration: 8 }
+  ],
+  'Chiptune / 8-bit (Game)': [
+      { type: 'Intro', description: '8-bit Start Sound', duration: 8 },
+      { type: 'Verse', description: 'Synthesized Vocals', duration: 16 },
+      { type: 'Chorus', description: 'Catchy Game Melody', duration: 16 },
+      { type: 'Bridge', description: 'Boss Fight Tension', duration: 8 },
+      { type: 'Chorus', description: 'Victory Fanfare', duration: 16 },
+      { type: 'Outro', description: 'Game Over SFX', duration: 4 }
+  ],
+  'Tango / Dramatic (Performance)': [
+      { type: 'Intro', description: 'Accordion & Staccato Strings', duration: 8 },
+      { type: 'Verse', description: 'Whispered Vocals (Tension)', duration: 16 },
+      { type: 'Chorus', description: 'Dramatic Tango Rhythm', duration: 16 },
+      { type: 'Instrumental', description: 'Violin Solo (Fast)', duration: 16 },
+      { type: 'Chorus', description: 'Dramatic Tango Rhythm', duration: 16 },
+      { type: 'Outro', description: 'Final Pose (Sharp Stop)', duration: 4 }
+  ],
+  'Gospel Choir (Uplifting)': [
+      { type: 'Intro', description: 'Organ & Hand Claps', duration: 8 },
+      { type: 'Verse', description: 'Solo Soulful Vocal', duration: 16 },
+      { type: 'Chorus', description: 'Full Choir Harmony', duration: 16 },
+      { type: 'Bridge', description: 'Call & Response', duration: 8 },
+      { type: 'Chorus', description: 'Grand Finale (Key Change)', duration: 16 },
+      { type: 'Outro', description: 'Amen / Fade Out', duration: 8 }
   ]
 };
 
