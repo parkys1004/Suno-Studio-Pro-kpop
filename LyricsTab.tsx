@@ -138,13 +138,12 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
   // Use persistent project data for variations instead of local state
   const variations = project.lyricVariations || [];
   const selectedVariationIndex = project.selectedLyricVariationIndex ?? null;
+  const focusedCardIndex = project.focusedLyricVariationIndex ?? null;
 
   const [loadingVariations, setLoadingVariations] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optimizationResult, setOptimizationResult] = useState<{ original: string, optimized: string, rationale: string } | null>(null);
   
-  const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(null);
-
   // NEW: Model Selection State (Default: Gemini 3 Pro)
   const [selectedModel, setSelectedModel] = useState<'gemini-3-pro-preview' | 'gemini-3-flash-preview'>('gemini-3-pro-preview');
 
@@ -433,8 +432,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
         
         const data = JSON.parse(response.text || '[]');
         // Save variations to project
-        onUpdate({ lyricVariations: data, selectedLyricVariationIndex: null });
-        setFocusedCardIndex(null); // Reset focus
+        onUpdate({ lyricVariations: data, selectedLyricVariationIndex: null, focusedLyricVariationIndex: null });
       } catch (e) {
           console.error(e);
           alert('Failed to generate variations.');
@@ -781,7 +779,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode }: { project: Project, on
 
                  return (
                      <div key={i} 
-                         onClick={() => setFocusedCardIndex(i)}
+                         onClick={() => onUpdate({ focusedLyricVariationIndex: i })}
                          style={{ 
                          backgroundColor: bgColor, 
                          borderRadius: '8px', 

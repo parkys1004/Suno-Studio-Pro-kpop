@@ -54,6 +54,7 @@ export interface Project {
   // Lyric Ideas Persistence
   lyricVariations?: {title: string, lyrics: string, rationale: string}[];
   selectedLyricVariationIndex?: number | null;
+  focusedLyricVariationIndex?: number | null; // Persist focused card
 
   // Lyric Settings Persistence (New)
   lyricLanguage?: string;
