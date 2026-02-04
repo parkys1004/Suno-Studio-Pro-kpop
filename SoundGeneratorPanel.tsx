@@ -85,7 +85,11 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
     const generatePrompt = async () => {
         setLoading(true);
         try {
-            const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash-exp';
+            // Model Selection
+            // Stable: gemini-3-flash-preview (Recommended for basic text)
+            // Pro: gemini-3-pro-preview (Recommended for complex reasoning)
+            const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
+            
             let danceInstruction = '';
             if (useStrictDanceMode) {
                  danceInstruction = `
@@ -166,10 +170,16 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
               
               Output ONLY the prompt string.
             `;
-    
+            
+            const config: any = {};
+            if (modelTier === 'pro') {
+                config.thinkingConfig = { thinkingBudget: 1024 };
+            }
+
             const response: any = await getGenAI().models.generateContent({
                  model: modelName,
                  contents: prompt,
+                 config: config
             });
             
             onUpdate({ sunoPrompt: response.text });
@@ -182,7 +192,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
     const generateCompositionAdvice = async () => {
         setLoadingAdvice(true);
         try {
-            const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash-exp';
+            const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
             const prompt = `
               Provide professional AI music composition suggestions for a ${project.genre} (${project.subGenre}) song.
               Mood: ${project.mood}. 
@@ -242,7 +252,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
             <h2 style={{ fontSize: '18px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#3b82f6', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                 <span className="material-symbols-outlined">auto_awesome</span> 생성 (Prompt)
                 <span style={{ fontSize: '12px', color: modelTier === 'pro' ? '#818cf8' : '#6b7280', marginLeft: 'auto', border: `1px solid ${modelTier === 'pro' ? '#818cf8' : '#4b5563'}`, padding: '4px 8px', borderRadius: '4px' }}>
-                      Model: {modelTier === 'pro' ? 'Gemini 3.0 Flash' : 'Gemini 2.0 Flash'}
+                      Model: {modelTier === 'pro' ? 'Gemini 3.0 Pro' : 'Gemini 3.0 Flash'}
                 </span>
             </h2>
 

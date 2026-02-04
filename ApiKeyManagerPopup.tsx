@@ -20,41 +20,40 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
   }, []);
 
   const testConnection = async (targetKey: string) => {
-    // 1. Basic Cleanup
     const cleanKey = targetKey.trim();
     if (!cleanKey) return;
+
+    // 1. Client-side Validation: Check for non-ASCII characters
+    // Fixes "Failed to execute 'append' on 'Headers': String contains non ISO-8859-1 code point."
+    if (/[^\x00-\x7F]/.test(cleanKey)) {
+        setStatus('ERROR');
+        setErrorMessage('❌ API 키 형식 오류: 한글이나 특수문자가 포함되어 있습니다. 영문/숫자 키를 정확히 복사했는지 확인하세요.');
+        setCaps({ text: 'ERROR', image: 'ERROR', pro: 'ERROR' });
+        return;
+    }
 
     setStatus('TESTING');
     setErrorMessage('');
     setCaps({ text: 'CHECKING', image: 'CHECKING', pro: 'CHECKING' });
-
-    // 2. Client-side Validation: Check for non-ASCII characters
-    // Prevents "Failed to execute 'append' on 'Headers': String contains non ISO-8859-1 code point."
-    if (/[^\x00-\x7F]/.test(cleanKey)) {
-        setStatus('ERROR');
-        setErrorMessage('❌ API 키 형식 오류: 한글이나 특수문자 등 유효하지 않은 문자가 포함되어 있습니다. 영문/숫자 키를 정확히 복사했는지 확인하세요.');
-        setCaps({ text: 'ERROR', image: 'ERROR', pro: 'ERROR' });
-        return;
-    }
     
     try {
       const tempAi = new GoogleGenAI({ apiKey: cleanKey });
       
-      // 1. Text & Reasoning Check (Essential)
-      // Try gemini-2.0-flash-exp first as it's widely available on free tier
+      // 2. Text & Reasoning Check (Essential)
+      // Strategy: Try gemini-3-flash-preview (Recommended) -> gemini-2.0-flash-exp (Fallback)
       let textStatus = 'ERROR';
       try {
           await tempAi.models.generateContent({
-              model: 'gemini-2.0-flash-exp',
+              model: 'gemini-3-flash-preview',
               contents: { parts: [{ text: 'Test connection' }] },
           });
           textStatus = 'SUCCESS';
       } catch (e) {
-          console.warn("gemini-2.0-flash-exp failed, trying fallback...", e);
+          console.warn("gemini-3-flash-preview failed, trying fallback...", e);
           try {
-              // Fallback to latest flash alias if specific model fails
+              // Fallback to experimental 2.0 if 3.0 fails
               await tempAi.models.generateContent({
-                  model: 'gemini-2.0-flash', 
+                  model: 'gemini-2.0-flash-exp', 
                   contents: { parts: [{ text: 'Test connection' }] },
               });
               textStatus = 'SUCCESS';
@@ -62,24 +61,20 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
               console.error("Text Check Failed completely:", e2);
               textStatus = 'ERROR';
               
-              // Enhanced Error Handling
-              // Parse error object or string to detect specific issues
-              const errObj = e2?.error || e2;
-              const errStr = JSON.stringify(errObj) + (e2?.message || '');
+              // Enhanced Error Handling for 429/Quota and other specific errors
+              const errStr = JSON.stringify(e2) + (e2?.message || '');
               
               if (errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota')) {
-                  setErrorMessage('⚠️ 할당량 초과 (429): 무료 등급 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
-              } else if (errStr.includes('ISO-8859-1') || errStr.includes('Headers')) {
-                  setErrorMessage('❌ API 키 오류: 키에 유효하지 않은 문자가 포함되어 있습니다.');
+                  setErrorMessage('⚠️ 할당량 초과 (429): 무료 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
               } else if (errStr.includes('API_KEY_INVALID') || errStr.includes('400')) {
                   setErrorMessage('❌ 유효하지 않은 API 키입니다.');
               } else {
-                  setErrorMessage(`연결 실패: ${e2?.message || '알 수 없는 오류'}`);
+                  setErrorMessage('API 연결에 실패했습니다. 키를 확인해주세요.');
               }
           }
       }
 
-      // 2. Image Generation Check
+      // 3. Image Generation Check
       // gemini-2.5-flash-image is the standard image gen model
       const checkImage = tempAi.models.generateContent({
           model: 'gemini-2.5-flash-image',
@@ -89,7 +84,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
           return 'ERROR';
       });
       
-      // 3. Pro Model Check (Paid Tier)
+      // 4. Pro Model Check (Paid Tier or High Quota)
       const checkPro = tempAi.models.generateContent({
           model: 'gemini-3-pro-image-preview',
           contents: { parts: [{ text: 'Test pro' }] },
@@ -118,22 +113,15 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
           }
       } else {
           setStatus('ERROR');
-          if (!errorMessage) { 
-             // If error message wasn't set in catch block (rare but possible logic path)
-             setErrorMessage('API 키 검증에 실패했습니다. 키 권한을 확인해주세요.');
+          if (!errorMessage) {
+             setErrorMessage('기본 텍스트 모델 연결에 실패했습니다.');
           }
       }
     } catch (e: any) {
       console.error("Connection Test Fatal Error:", e);
       setStatus('ERROR');
       setCaps({ text: 'ERROR', image: 'ERROR', pro: 'ERROR' });
-      
-      const errStr = e?.message || String(e);
-      if (errStr.includes('ISO-8859-1') || errStr.includes('Headers')) {
-          setErrorMessage('❌ 치명적 오류: API 키에 허용되지 않는 문자가 있습니다.');
-      } else {
-          setErrorMessage('치명적인 오류가 발생했습니다. 키 형식을 확인하세요.');
-      }
+      setErrorMessage(e.message || '치명적인 오류가 발생했습니다.');
     }
   };
 
@@ -228,10 +216,10 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
                 </button>
             )}
 
-            {status === 'ERROR' && (
+            {status === 'ERROR' && errorMessage && (
                 <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                     <p style={{ color: '#ef4444', fontSize: '13px', margin: 0, fontWeight: 'bold' }}>
-                        {errorMessage || 'API 키가 유효하지 않거나 연결에 실패했습니다.'}
+                        {errorMessage}
                     </p>
                 </div>
             )}

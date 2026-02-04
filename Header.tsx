@@ -33,12 +33,12 @@ const Header = ({ view, project, onBack, onSave, onImport, onRemix, legibilityMo
                         fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px',
                         transition: 'all 0.2s'
                     }}
-                    title={modelTier === 'pro' ? "Using Gemini 3.0 Pro (Requires Paid Key)" : "Using Gemini 2.0 Flash (Stable, Free)"}
+                    title={modelTier === 'pro' ? "Using Gemini 3.0 Pro (Thinking)" : "Using Gemini 3.0 Flash (Fast)"}
                 >
                     <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
                         {modelTier === 'pro' ? 'rocket_launch' : 'speed'}
                     </span>
-                    {modelTier === 'pro' ? 'Pro (3.0)' : 'Stable (2.0)'}
+                    {modelTier === 'pro' ? 'Pro (3.0)' : 'Flash (3.0)'}
                 </button>
 
                 {/* Key Management Button */}

@@ -10,7 +10,9 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
   const [loadingReferences, setLoadingReferences] = useState(false);
   
   // Model Selection Logic
-  const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash-exp';
+  // Stable: gemini-3-flash-preview (Recommended for basic text)
+  // Pro: gemini-3-pro-preview (Recommended for complex reasoning)
+  const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
   
   // Use persistent project data for theme packs
   const themePacks = project.generatedThemePacks || [];
@@ -180,7 +182,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
         <span className="material-symbols-outlined" style={{ color: '#fbbf24' }}>auto_awesome</span>
         🎵 프로젝트 기획 (Concept)
         <span style={{ fontSize: '12px', color: modelTier === 'pro' ? '#818cf8' : '#6b7280', marginLeft: 'auto', border: `1px solid ${modelTier === 'pro' ? '#818cf8' : '#4b5563'}`, padding: '4px 8px', borderRadius: '4px' }}>
-             Model: {modelTier === 'pro' ? 'Gemini 3.0 Flash' : 'Gemini 2.0 Flash'}
+             Model: {modelTier === 'pro' ? 'Gemini 3.0 Pro' : 'Gemini 3.0 Flash'}
         </span>
       </h2>
 
