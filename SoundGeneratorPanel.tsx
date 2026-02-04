@@ -92,8 +92,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
                 try {
                     return await genAI.models.generateContent({ model: 'gemini-2.0-flash', contents: prompt, config });
                 } catch (e2) {
-                    console.warn(`2.0 failed. Trying 1.5...`, e2);
-                    return await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt, config });
+                    throw e2; // Do not fall back to 1.5, allow error to bubble if 2.0 fails
                 }
             }
             throw e1;

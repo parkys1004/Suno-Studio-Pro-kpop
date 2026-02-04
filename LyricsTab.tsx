@@ -103,7 +103,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
           ${project.djName ? `- IMPORTANT: Include a shoutout to "${project.djName}" in EITHER the [Intro] OR the [Outro]. Choose ONE location only. Do NOT repeat it.` : ''}
         `;
 
-        // Model Selection Logic for Lyrics with 3-Layer Fallback
+        // Model Selection Logic for Lyrics with 2-Layer Fallback (Updated)
         const primaryModel = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
         let response: any;
         const genAI = getGenAI();
@@ -122,7 +122,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
         } catch (firstError: any) {
             console.warn(`Primary model ${primaryModel} failed. Attempting fallback...`, firstError);
             
-            // Fallback Logic: If Stable mode fails, try gemini-2.0-flash -> gemini-1.5-flash
+            // Fallback Logic: Try gemini-2.0-flash (Stable)
             if (modelTier === 'stable') {
                 try {
                     response = await genAI.models.generateContent({
@@ -130,18 +130,10 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
                         contents: prompt
                     });
                 } catch (secondError) {
-                    console.warn(`2.0 failed. Trying 1.5...`, secondError);
-                    try {
-                        response = await genAI.models.generateContent({
-                            model: 'gemini-1.5-flash', 
-                            contents: prompt
-                        });
-                    } catch (thirdError) {
-                        throw thirdError;
-                    }
+                    throw secondError; // If 2.0 fails, throw error. Do NOT use 1.5.
                 }
             } else {
-                throw firstError; // If Pro mode fails, show error (user expects pro features)
+                throw firstError; // If Pro mode fails, show error
             }
         }
         
@@ -184,9 +176,9 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
             Return ONLY a JSON object.
         `;
         
-        // Use 1.5 flash for optimization utility as it's safer
+        // Use 2.0 flash for optimization utility (Stable/Fast) - 1.5 is deprecated
         const response: any = await getGenAI().models.generateContent({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-2.0-flash',
             contents: prompt,
             config: {
                 responseMimeType: 'application/json',

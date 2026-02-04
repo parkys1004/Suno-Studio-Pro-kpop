@@ -44,7 +44,7 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
               Schema: [{ title: string, rationale: string, lyrics: string }]
             `;
   
-            // Model Selection with 3-Layer Fallback
+            // Model Selection with 2-Layer Fallback (Updated)
             const primaryModel = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
             const genAI = getGenAI();
             const config = {
@@ -72,7 +72,7 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
                 });
             } catch (firstError) {
                 console.warn(`Variation gen failed on ${primaryModel}, trying fallback...`, firstError);
-                // Fallback to gemini-2.0-flash -> 1.5-flash if Stable mode fails
+                // Fallback to gemini-2.0-flash (Stable)
                 if (modelTier === 'stable') {
                     try {
                         response = await genAI.models.generateContent({
@@ -81,16 +81,7 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
                             config: config
                         });
                     } catch (secondError) {
-                        console.warn('2.0 failed, trying 1.5...', secondError);
-                        try {
-                            response = await genAI.models.generateContent({
-                                model: 'gemini-1.5-flash',
-                                contents: prompt,
-                                config: config
-                            });
-                        } catch (thirdError) {
-                             throw thirdError;
-                        }
+                         throw secondError;
                     }
                 } else {
                     throw firstError;

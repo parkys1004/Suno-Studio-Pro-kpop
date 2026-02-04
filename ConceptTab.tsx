@@ -21,12 +21,13 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
           return await genAI.models.generateContent({ model: primaryModel, contents: prompt, config });
       } catch (e1) {
           console.warn(`${primaryModel} failed. Trying 2.0...`, e1);
-          if (modelTier === 'stable') { // Only fallback for stable tier, Pro users expect pro model
+          if (modelTier === 'stable') { 
+              // Fallback to gemini-2.0-flash (Stable)
+              // We do NOT use gemini-1.5-flash anymore as it causes 404 errors.
               try {
                   return await genAI.models.generateContent({ model: 'gemini-2.0-flash', contents: prompt, config });
               } catch (e2) {
-                  console.warn(`2.0 failed. Trying 1.5...`, e2);
-                  return await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt, config });
+                  throw e2;
               }
           }
           throw e1;

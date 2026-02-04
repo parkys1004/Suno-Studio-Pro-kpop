@@ -39,8 +39,8 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       const tempAi = new GoogleGenAI({ apiKey: cleanKey });
       
       // 2. Text & Reasoning Check (Essential)
-      // Strategy: 3-Layer Fallback (3.0 Preview -> 2.0 Flash -> 1.5 Flash)
-      // Ensures free tier keys work even if 3.0 is rate limited or restricted.
+      // Strategy: 2-Layer Fallback (3.0 Preview -> 2.0 Flash)
+      // gemini-1.5-flash causes 404 errors on some keys/versions, so we rely on 2.0 as the stable fallback.
       let textStatus = 'ERROR';
       try {
           // Attempt 1: Newest (3.0)
@@ -58,29 +58,21 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
                   contents: { parts: [{ text: 'Test connection' }] },
               });
               textStatus = 'SUCCESS';
-          } catch (e2) {
-              console.warn("gemini-2.0-flash failed, trying fallback 2 (1.5)...", e2);
-              try {
-                  // Attempt 3: 1.5 Flash (Most Reliable for Free Tier)
-                   await tempAi.models.generateContent({
-                      model: 'gemini-1.5-flash', 
-                      contents: { parts: [{ text: 'Test connection' }] },
-                  });
-                  textStatus = 'SUCCESS';
-              } catch (e3: any) {
-                  console.error("All text models failed:", e3);
-                  textStatus = 'ERROR';
-                  
-                  // Enhanced Error Handling
-                  const errStr = JSON.stringify(e3) + (e3?.message || '');
-                  
-                  if (errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota')) {
-                      setErrorMessage('⚠️ 할당량 초과 (429): 무료 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
-                  } else if (errStr.includes('API_KEY_INVALID') || errStr.includes('400') || errStr.includes('403')) {
-                      setErrorMessage('❌ 권한 거부 (403/400): API 키가 잘못되었거나, Google AI Studio에서 "HTTP Referrer" 제한이 설정되어 있을 수 있습니다.');
-                  } else {
-                      setErrorMessage(`API 연결 실패: ${e3.message || '알 수 없는 오류'}`);
-                  }
+          } catch (e2: any) {
+              console.error("All text models failed:", e2);
+              textStatus = 'ERROR';
+              
+              // Enhanced Error Handling
+              const errStr = JSON.stringify(e2) + (e2?.message || '');
+              
+              if (errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota')) {
+                  setErrorMessage('⚠️ 할당량 초과 (429): 무료 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
+              } else if (errStr.includes('API_KEY_INVALID') || errStr.includes('400') || errStr.includes('403')) {
+                  setErrorMessage('❌ 권한 거부 (403/400): API 키가 잘못되었거나, Google AI Studio에서 "HTTP Referrer" 제한이 설정되어 있을 수 있습니다.');
+              } else if (errStr.includes('404')) {
+                  setErrorMessage(`❌ 모델을 찾을 수 없음 (404): API 키가 해당 모델(gemini-2.0-flash)에 접근할 수 없습니다.`);
+              } else {
+                  setErrorMessage(`API 연결 실패: ${e2.message || '알 수 없는 오류'}`);
               }
           }
       }
