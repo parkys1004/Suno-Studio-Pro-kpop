@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Project, StudioTab } from './types';
-import { NavButton, ManualModal } from './SharedComponents';
+import { NavButton } from './SharedComponents';
+import ManualModal from './ManualModal';
 import ConceptTab from './ConceptTab';
 import StructureTab from './StructureTab';
 import LyricsTab from './LyricsTab';
@@ -10,16 +10,16 @@ import ArtTab from './ArtTab';
 import ExportTab from './ExportTab';
 
 // --- Studio Component ---
-const Studio = ({ project, onUpdate, onBack, onExportJSON, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, onBack: () => void, onExportJSON: () => void, legibilityMode: boolean }) => {
+const Studio = ({ project, onUpdate, onBack, onExportJSON, legibilityMode, modelTier }: { project: Project, onUpdate: (u: Partial<Project>) => void, onBack: () => void, onExportJSON: () => void, legibilityMode: boolean, modelTier: 'stable' | 'pro' }) => {
   const [activeTab, setActiveTab] = useState<StudioTab>('CONCEPT');
   const [showManual, setShowManual] = useState(false);
 
   const renderContent = () => {
     switch(activeTab) {
-      case 'CONCEPT': return <ConceptTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} />;
+      case 'CONCEPT': return <ConceptTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} modelTier={modelTier} />;
       case 'STRUCTURE': return <StructureTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} />;
-      case 'LYRICS': return <LyricsTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} />;
-      case 'SOUND': return <SoundTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} />;
+      case 'LYRICS': return <LyricsTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} modelTier={modelTier} />;
+      case 'SOUND': return <SoundTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} modelTier={modelTier} />;
       case 'ART': return <ArtTab project={project} onUpdate={onUpdate} legibilityMode={legibilityMode} />;
       case 'EXPORT': return <ExportTab project={project} onExportJSON={onExportJSON} legibilityMode={legibilityMode} />;
       default: return <div>Unknown Tab</div>;

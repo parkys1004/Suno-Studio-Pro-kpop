@@ -3,13 +3,13 @@ import React from 'react';
 import { Project } from './types';
 import { Icon } from './SharedComponents';
 
-const Header = ({ view, project, onBack, onSave, onImport, onRemix, legibilityMode, onToggleLegibility, onOpenKeyManager }: any) => {
+const Header = ({ view, project, onBack, onSave, onImport, onRemix, legibilityMode, onToggleLegibility, onOpenKeyManager, modelTier, onToggleModelTier }: any) => {
     return (
         <div className="app-header" style={{ height: '60px', backgroundColor: '#111827', borderBottom: '1px solid #374151', display: 'flex', alignItems: 'center', padding: '0 20px', justifyContent: 'space-between', boxSizing: 'border-box' }}>
             <div className="header-logo" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={onBack}>
                     <span className="material-symbols-outlined" style={{ fontSize: '24px', color: '#e11d48' }}>piano</span>
-                    <span style={{ fontSize: '18px', fontWeight: 'bold', color: legibilityMode ? '#FFFFFF' : 'white' }}>Suno Studio Pro V1.5</span>
+                    <span style={{ fontSize: '18px', fontWeight: 'bold', color: legibilityMode ? '#FFFFFF' : 'white' }}>Suno Studio Pro V1.6</span>
                 </div>
                 {view === 'STUDIO' && project && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderLeft: '1px solid #374151', paddingLeft: '15px', marginLeft: '5px' }}>
@@ -20,6 +20,27 @@ const Header = ({ view, project, onBack, onSave, onImport, onRemix, legibilityMo
                 )}
             </div>
             <div className="header-actions" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                
+                {/* NEW: Model Tier Toggle */}
+                <button
+                    onClick={onToggleModelTier}
+                    style={{
+                        padding: '6px 12px',
+                        backgroundColor: modelTier === 'pro' ? 'rgba(99, 102, 241, 0.2)' : '#374151',
+                        border: modelTier === 'pro' ? '1px solid #6366f1' : '1px solid #4b5563',
+                        color: modelTier === 'pro' ? '#a5b4fc' : '#d1d5db',
+                        borderRadius: '6px', fontSize: '12px', cursor: 'pointer',
+                        fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px',
+                        transition: 'all 0.2s'
+                    }}
+                    title={modelTier === 'pro' ? "Using Gemini 3.0 Pro (Requires Paid Key)" : "Using Gemini 2.0 Flash (Stable, Free)"}
+                >
+                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
+                        {modelTier === 'pro' ? 'rocket_launch' : 'speed'}
+                    </span>
+                    {modelTier === 'pro' ? 'Pro (3.0)' : 'Stable (2.0)'}
+                </button>
+
                 {/* Key Management Button */}
                 <button 
                     onClick={onOpenKeyManager}

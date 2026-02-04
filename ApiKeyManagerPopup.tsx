@@ -27,8 +27,9 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       const tempAi = new GoogleGenAI({ apiKey: targetKey });
       
       // Define checks for 3 core models
+      // Changed to gemini-2.0-flash for better free tier compatibility
       const checkText = tempAi.models.generateContent({
-          model: 'gemini-3-flash-preview',
+          model: 'gemini-2.0-flash',
           contents: 'hi',
       }).then(() => 'SUCCESS').catch(() => 'ERROR');
 

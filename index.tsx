@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ViewState, Project } from './types';
@@ -17,6 +16,18 @@ const App = () => {
         const saved = localStorage.getItem('suno_legibility_mode');
         return saved === 'true';
     });
+    
+    // NEW: Model Tier State (stable | pro)
+    const [modelTier, setModelTier] = useState<'stable' | 'pro'>(() => {
+        const saved = localStorage.getItem('suno_model_tier');
+        return (saved === 'pro') ? 'pro' : 'stable';
+    });
+
+    const toggleModelTier = () => {
+        const newVal = modelTier === 'stable' ? 'pro' : 'stable';
+        setModelTier(newVal);
+        localStorage.setItem('suno_model_tier', newVal);
+    };
 
     const toggleLegibility = () => {
         const newVal = !legibilityMode;
@@ -42,7 +53,7 @@ const App = () => {
             instruments: GENRE_DEFAULTS[form.genre] || [],
             vocalType: 'Male',
             // Default Lyric Settings
-            lyricLanguage: 'Korean & English Mix',
+            lyricLanguage: 'Korean Only',
             lyricDuration: 180,
             lyricDanceMode: false,
             lyricAutoAdjust: false,
@@ -150,6 +161,8 @@ const App = () => {
                 legibilityMode={legibilityMode}
                 onToggleLegibility={toggleLegibility}
                 onOpenKeyManager={() => setShowKeyManager(true)}
+                modelTier={modelTier}
+                onToggleModelTier={toggleModelTier}
             />
             <div style={{ flex: 1, overflow: 'hidden' }}>
                 {view === 'DASHBOARD' && (
@@ -169,6 +182,7 @@ const App = () => {
                         onBack={() => setView('DASHBOARD')} 
                         onExportJSON={() => handleExportProject(activeProject)}
                         legibilityMode={legibilityMode}
+                        modelTier={modelTier}
                     />
                 )}
             </div>

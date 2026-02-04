@@ -1,14 +1,16 @@
-
 import React, { useState } from 'react';
 import { Type } from "@google/genai";
 import { getGenAI } from './utils';
 import { Project, ThemePack, ReferenceSuggestion } from './types';
 
 // --- TAB: Concept ---
-const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean }) => {
+const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: Project, onUpdate: (u: Partial<Project>) => void, legibilityMode: boolean, modelTier: 'stable' | 'pro' }) => {
   const [loadingPacks, setLoadingPacks] = useState(false);
   const [loadingTitles, setLoadingTitles] = useState(false);
   const [loadingReferences, setLoadingReferences] = useState(false);
+  
+  // Model Selection Logic
+  const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash';
   
   // Use persistent project data for theme packs
   const themePacks = project.generatedThemePacks || [];
@@ -38,7 +40,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
         `;
 
         const response: any = await getGenAI().models.generateContent({
-            model: 'gemini-3-flash-preview',
+            model: modelName,
             contents: prompt,
             config: {
                 responseMimeType: 'application/json',
@@ -62,7 +64,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
         onUpdate({ generatedThemePacks: data });
     } catch (e) {
         console.error(e);
-        alert('아이디어 팩 생성 중 오류가 발생했습니다.');
+        alert(`아이디어 팩 생성 오류: ${modelTier} 모드`);
     }
     setLoadingPacks(false);
   };
@@ -84,7 +86,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
           - Do not include any other text or markdown.`;
 
           const response: any = await getGenAI().models.generateContent({
-              model: 'gemini-3-flash-preview',
+              model: modelName,
               contents: prompt,
               config: {
                   responseMimeType: 'application/json',
@@ -113,7 +115,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
           Do not include markdown code blocks.`;
 
           const response: any = await getGenAI().models.generateContent({
-              model: 'gemini-3-flash-preview',
+              model: modelName,
               contents: prompt,
               config: {
                   responseMimeType: 'application/json',
@@ -163,6 +165,12 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
       window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
   };
 
+  const copyTitle = () => {
+      if (!project.title) return;
+      navigator.clipboard.writeText(project.title);
+      alert('제목이 복사되었습니다!');
+  };
+
   const primaryTextColor = legibilityMode ? '#FFFFFF' : 'white';
   const labelColor = legibilityMode ? '#F9FAF8' : '#d1d5db';
 
@@ -171,6 +179,9 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
       <h2 style={{ borderBottom: '1px solid #374151', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', color: primaryTextColor, fontWeight: legibilityMode ? 'bold' : 'normal' }}>
         <span className="material-symbols-outlined" style={{ color: '#fbbf24' }}>auto_awesome</span>
         🎵 프로젝트 기획 (Concept)
+        <span style={{ fontSize: '12px', color: modelTier === 'pro' ? '#818cf8' : '#6b7280', marginLeft: 'auto', border: `1px solid ${modelTier === 'pro' ? '#818cf8' : '#4b5563'}`, padding: '4px 8px', borderRadius: '4px' }}>
+             Model: {modelTier === 'pro' ? 'Gemini 3.0 Flash' : 'Gemini 2.0 Flash'}
+        </span>
       </h2>
 
       {/* AI Theme Pack Suggestion Section */}
@@ -261,17 +272,44 @@ const ConceptTab = ({ project, onUpdate, legibilityMode }: { project: Project, o
              <div style={{ marginBottom: '25px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <label style={{ color: labelColor, fontWeight: 'bold' }}>현재 제목 (Title)</label>
-                    <button 
-                        onClick={generateTitleSuggestions}
-                        disabled={loadingTitles}
-                        style={{ 
-                            fontSize: '11px', padding: '4px 10px', backgroundColor: '#3b82f6', color: 'white', 
-                            border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' 
-                        }}
-                    >
-                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>magic_button</span>
-                        {loadingTitles ? '추천 중...' : 'AI 제목 추천 (5가지)'}
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                            onClick={copyTitle}
+                            disabled={!project.title}
+                            style={{
+                                fontSize: '13px', 
+                                padding: '8px 16px', 
+                                backgroundColor: '#10b981', 
+                                color: 'white',
+                                border: 'none', 
+                                borderRadius: '8px', 
+                                cursor: 'pointer', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '6px',
+                                fontWeight: 'bold',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
+                            title="제목 복사"
+                        >
+                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>content_copy</span>
+                            제목 복사
+                        </button>
+                        <button 
+                            onClick={generateTitleSuggestions}
+                            disabled={loadingTitles}
+                            style={{ 
+                                fontSize: '11px', padding: '4px 10px', backgroundColor: '#3b82f6', color: 'white', 
+                                border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' 
+                            }}
+                        >
+                            <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>magic_button</span>
+                            {loadingTitles ? '추천 중...' : 'AI 제목 추천 (5가지)'}
+                        </button>
+                    </div>
                 </div>
                 <input 
                     type="text" 
