@@ -44,8 +44,13 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
               Schema: [{ title: string, rationale: string, lyrics: string }]
             `;
   
+            // Model Selection:
+            // Stable: gemini-3-flash-preview (Best for Free Tier, high speed, large context)
+            // Pro: gemini-3-pro-preview (Better reasoning, slower)
+            const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
+
             const response: any = await getGenAI().models.generateContent({
-              model: modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash',
+              model: modelName,
               contents: prompt,
               config: {
                   responseMimeType: 'application/json',
@@ -68,7 +73,7 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
           onUpdate({ lyricVariations: data, selectedLyricVariationIndex: null, focusedLyricVariationIndex: null });
         } catch (e) {
             console.error(e);
-            alert('Failed to generate variations.');
+            alert(`아이디어 생성 오류 (${modelTier} 모드). 잠시 후 다시 시도해주세요.`);
         }
         setLoadingVariations(false);
     };
@@ -83,6 +88,9 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', borderLeft: '1px solid #374151', borderRight: '1px solid #374151', padding: '0 20px' }}>
             <h2 style={{ fontSize: '20px', borderBottom: '1px solid #374151', paddingBottom: '15px', margin: 0, color: '#3b82f6', display:'flex', alignItems:'center', gap:'10px', fontWeight: legibilityMode ? 'bold' : 'normal' }}>
                 <span className="material-symbols-outlined">lightbulb</span> 아이디어 (5 Variations)
+                <span style={{ fontSize: '12px', color: modelTier === 'pro' ? '#818cf8' : '#6b7280', marginLeft: 'auto', border: `1px solid ${modelTier === 'pro' ? '#818cf8' : '#4b5563'}`, padding: '4px 8px', borderRadius: '4px', fontWeight: 'normal' }}>
+                     Model: {modelTier === 'pro' ? 'Gemini 3.0 Pro' : 'Gemini 3.0 Flash'}
+                </span>
             </h2>
             
             <div style={{ backgroundColor: '#1e3a8a', borderRadius: '8px', padding: '15px' }}>
@@ -98,7 +106,7 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'
                    }}
                 >
-                   {loadingVariations ? '아이디어 구상 중...' : '✨ 5가지 버전 생성하기'}
+                   {loadingVariations ? '아이디어 구상 중...' : <><span className="material-symbols-outlined" style={{ fontSize: '18px' }}>auto_awesome</span> 5가지 버전 생성하기</>}
                 </button>
             </div>
 
