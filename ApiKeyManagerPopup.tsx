@@ -12,6 +12,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       pro: 'IDLE'
   });
   const [savedKeyExists, setSavedKeyExists] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const key = localStorage.getItem('suno_pro_api_key');
@@ -19,11 +20,22 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
   }, []);
 
   const testConnection = async (targetKey: string) => {
-    const cleanKey = targetKey.trim(); // Remove whitespace
+    // 1. Basic Cleanup
+    const cleanKey = targetKey.trim();
     if (!cleanKey) return;
 
     setStatus('TESTING');
+    setErrorMessage('');
     setCaps({ text: 'CHECKING', image: 'CHECKING', pro: 'CHECKING' });
+
+    // 2. Client-side Validation: Check for non-ASCII characters
+    // Prevents "Failed to execute 'append' on 'Headers': String contains non ISO-8859-1 code point."
+    if (/[^\x00-\x7F]/.test(cleanKey)) {
+        setStatus('ERROR');
+        setErrorMessage('❌ API 키 형식 오류: 한글이나 특수문자 등 유효하지 않은 문자가 포함되어 있습니다. 영문/숫자 키를 정확히 복사했는지 확인하세요.');
+        setCaps({ text: 'ERROR', image: 'ERROR', pro: 'ERROR' });
+        return;
+    }
     
     try {
       const tempAi = new GoogleGenAI({ apiKey: cleanKey });
@@ -46,9 +58,24 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
                   contents: { parts: [{ text: 'Test connection' }] },
               });
               textStatus = 'SUCCESS';
-          } catch (e2) {
+          } catch (e2: any) {
               console.error("Text Check Failed completely:", e2);
               textStatus = 'ERROR';
+              
+              // Enhanced Error Handling
+              // Parse error object or string to detect specific issues
+              const errObj = e2?.error || e2;
+              const errStr = JSON.stringify(errObj) + (e2?.message || '');
+              
+              if (errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota')) {
+                  setErrorMessage('⚠️ 할당량 초과 (429): 무료 등급 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
+              } else if (errStr.includes('ISO-8859-1') || errStr.includes('Headers')) {
+                  setErrorMessage('❌ API 키 오류: 키에 유효하지 않은 문자가 포함되어 있습니다.');
+              } else if (errStr.includes('API_KEY_INVALID') || errStr.includes('400')) {
+                  setErrorMessage('❌ 유효하지 않은 API 키입니다.');
+              } else {
+                  setErrorMessage(`연결 실패: ${e2?.message || '알 수 없는 오류'}`);
+              }
           }
       }
 
@@ -91,11 +118,22 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
           }
       } else {
           setStatus('ERROR');
+          if (!errorMessage) { 
+             // If error message wasn't set in catch block (rare but possible logic path)
+             setErrorMessage('API 키 검증에 실패했습니다. 키 권한을 확인해주세요.');
+          }
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error("Connection Test Fatal Error:", e);
       setStatus('ERROR');
       setCaps({ text: 'ERROR', image: 'ERROR', pro: 'ERROR' });
+      
+      const errStr = e?.message || String(e);
+      if (errStr.includes('ISO-8859-1') || errStr.includes('Headers')) {
+          setErrorMessage('❌ 치명적 오류: API 키에 허용되지 않는 문자가 있습니다.');
+      } else {
+          setErrorMessage('치명적인 오류가 발생했습니다. 키 형식을 확인하세요.');
+      }
     }
   };
 
@@ -104,6 +142,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
     setSavedKeyExists(false);
     setKeyInput('');
     setStatus('IDLE');
+    setErrorMessage('');
     setCaps({ text: 'IDLE', image: 'IDLE', pro: 'IDLE' });
   };
 
@@ -189,7 +228,13 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
                 </button>
             )}
 
-            {status === 'ERROR' && <p style={{ color: '#ef4444', fontSize: '12px' }}>API 키가 유효하지 않거나 연결에 실패했습니다.</p>}
+            {status === 'ERROR' && (
+                <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                    <p style={{ color: '#ef4444', fontSize: '13px', margin: 0, fontWeight: 'bold' }}>
+                        {errorMessage || 'API 키가 유효하지 않거나 연결에 실패했습니다.'}
+                    </p>
+                </div>
+            )}
           </div>
         )}
         <p style={{ marginTop: '20px', fontSize: '11px', color: '#6b7280' }}>
