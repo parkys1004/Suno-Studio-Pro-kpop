@@ -44,36 +44,71 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
               Schema: [{ title: string, rationale: string, lyrics: string }]
             `;
   
-            // Model Selection:
-            // Stable: gemini-3-flash-preview (Best for Free Tier, high speed, large context)
-            // Pro: gemini-3-pro-preview (Better reasoning, slower)
-            const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
+            // Model Selection with Fallback
+            const primaryModel = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
+            let response: any;
 
-            const response: any = await getGenAI().models.generateContent({
-              model: modelName,
-              contents: prompt,
-              config: {
-                  responseMimeType: 'application/json',
-                  responseSchema: {
-                      type: Type.ARRAY,
-                      items: {
-                          type: Type.OBJECT,
-                          properties: {
-                              title: { type: Type.STRING },
-                              rationale: { type: Type.STRING },
-                              lyrics: { type: Type.STRING }
-                          },
-                          required: ['title', 'rationale', 'lyrics']
-                      }
-                  }
-              }
-          });
+            try {
+                response = await getGenAI().models.generateContent({
+                    model: primaryModel,
+                    contents: prompt,
+                    config: {
+                        responseMimeType: 'application/json',
+                        responseSchema: {
+                            type: Type.ARRAY,
+                            items: {
+                                type: Type.OBJECT,
+                                properties: {
+                                    title: { type: Type.STRING },
+                                    rationale: { type: Type.STRING },
+                                    lyrics: { type: Type.STRING }
+                                },
+                                required: ['title', 'rationale', 'lyrics']
+                            }
+                        }
+                    }
+                });
+            } catch (firstError) {
+                console.warn(`Variation gen failed on ${primaryModel}, trying fallback...`, firstError);
+                // Fallback to gemini-2.0-flash if Stable mode fails
+                if (modelTier === 'stable') {
+                    try {
+                        response = await getGenAI().models.generateContent({
+                            model: 'gemini-2.0-flash',
+                            contents: prompt,
+                            config: {
+                                responseMimeType: 'application/json',
+                                responseSchema: {
+                                    type: Type.ARRAY,
+                                    items: {
+                                        type: Type.OBJECT,
+                                        properties: {
+                                            title: { type: Type.STRING },
+                                            rationale: { type: Type.STRING },
+                                            lyrics: { type: Type.STRING }
+                                        },
+                                        required: ['title', 'rationale', 'lyrics']
+                                    }
+                                }
+                            }
+                        });
+                    } catch (secondError) {
+                        throw secondError;
+                    }
+                } else {
+                    throw firstError;
+                }
+            }
           
           const data = JSON.parse(response.text || '[]');
           onUpdate({ lyricVariations: data, selectedLyricVariationIndex: null, focusedLyricVariationIndex: null });
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
-            alert(`아이디어 생성 오류 (${modelTier} 모드). 잠시 후 다시 시도해주세요.`);
+            let msg = `아이디어 생성 오류 (${modelTier} 모드)`;
+            if (e.message?.includes('429') || e.message?.includes('quota')) {
+                msg += '\n⚠️ 무료 사용량 초과 (잠시 후 다시 시도하세요)';
+            }
+            alert(msg);
         }
         setLoadingVariations(false);
     };
