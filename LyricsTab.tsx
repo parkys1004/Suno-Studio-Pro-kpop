@@ -103,50 +103,25 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
           ${project.djName ? `- IMPORTANT: Include a shoutout to "${project.djName}" in EITHER the [Intro] OR the [Outro]. Choose ONE location only. Do NOT repeat it.` : ''}
         `;
 
-        // Model Selection Logic for Lyrics with 2-Layer Fallback (Updated)
-        const primaryModel = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
-        let response: any;
-        const genAI = getGenAI();
-
-        try {
-            const config: any = {};
-            if (modelTier === 'pro') {
-                config.thinkingConfig = { thinkingBudget: 1024 }; 
-            }
-            
-            response = await genAI.models.generateContent({
-                model: primaryModel, 
-                contents: prompt,
-                config: config
-            });
-        } catch (firstError: any) {
-            console.warn(`Primary model ${primaryModel} failed. Attempting fallback...`, firstError);
-            
-            // Fallback Logic: Try gemini-2.0-flash (Stable)
-            if (modelTier === 'stable') {
-                try {
-                    response = await genAI.models.generateContent({
-                        model: 'gemini-2.0-flash', 
-                        contents: prompt
-                    });
-                } catch (secondError) {
-                    throw secondError; // If 2.0 fails, throw error. Do NOT use 1.5.
-                }
-            } else {
-                throw firstError; // If Pro mode fails, show error
-            }
+        // Model Selection Logic for Lyrics
+        // Pro Mode: gemini-3-pro-preview with Thinking Config for deeper reasoning
+        // Stable Mode: gemini-3-flash-preview (Recommended for basic text)
+        const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
+        const config: any = {};
+        
+        if (modelTier === 'pro') {
+            config.thinkingConfig = { thinkingBudget: 1024 }; // Enable reasoning for lyrics in Pro mode
         }
+
+        const response: any = await getGenAI().models.generateContent({
+            model: modelName, 
+            contents: prompt,
+            config: config
+        });
         
         onUpdate({ lyrics: response.text });
-    } catch (e: any) {
-        console.error(e);
-        let msg = `가사 생성 실패 (${modelTier} 모드)`;
-        if (e.message?.includes('429') || e.message?.includes('quota')) {
-            msg += '\n⚠️ 무료 사용량 초과 (Quota Exceeded). 잠시 후 다시 시도하세요.';
-        } else {
-            msg += `\n오류: ${e.message?.substring(0, 50)}...`;
-        }
-        alert(msg);
+    } catch (e) {
+        alert(`가사 생성 실패 (${modelTier} 모드)`);
     }
     setLoading(false);
   };
@@ -176,9 +151,8 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
             Return ONLY a JSON object.
         `;
         
-        // Use 2.0 flash for optimization utility (Stable/Fast) - 1.5 is deprecated
         const response: any = await getGenAI().models.generateContent({
-            model: 'gemini-2.0-flash',
+            model: 'gemini-3-flash-preview',
             contents: prompt,
             config: {
                 responseMimeType: 'application/json',

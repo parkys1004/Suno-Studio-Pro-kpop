@@ -82,27 +82,12 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
         alert('Prompt Copied!');
     };
 
-    const generateWithFallback = async (primaryModel: string, prompt: string, config: any) => {
-        const genAI = getGenAI();
-        try {
-            return await genAI.models.generateContent({ model: primaryModel, contents: prompt, config });
-        } catch (e1) {
-            console.warn(`${primaryModel} failed. Trying 2.0...`, e1);
-            if (modelTier === 'stable') {
-                try {
-                    return await genAI.models.generateContent({ model: 'gemini-2.0-flash', contents: prompt, config });
-                } catch (e2) {
-                    throw e2; // Do not fall back to 1.5, allow error to bubble if 2.0 fails
-                }
-            }
-            throw e1;
-        }
-    };
-
     const generatePrompt = async () => {
         setLoading(true);
         try {
             // Model Selection
+            // Stable: gemini-3-flash-preview (Recommended for basic text)
+            // Pro: gemini-3-pro-preview (Recommended for complex reasoning)
             const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
             
             let danceInstruction = '';
@@ -191,10 +176,15 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
                 config.thinkingConfig = { thinkingBudget: 1024 };
             }
 
-            const response: any = await generateWithFallback(modelName, prompt, config);
+            const response: any = await getGenAI().models.generateContent({
+                 model: modelName,
+                 contents: prompt,
+                 config: config
+            });
+            
             onUpdate({ sunoPrompt: response.text });
         } catch (e) {
-            alert('Prompt generation failed. Please check your connection or API key.');
+            alert('Prompt generation failed');
         }
         setLoading(false);
     };
@@ -221,7 +211,11 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
               - Format with Markdown.
             `;
     
-            const response: any = await generateWithFallback(modelName, prompt, {});
+            const response: any = await getGenAI().models.generateContent({
+                 model: modelName,
+                 contents: prompt,
+            });
+            
             onUpdate({ compositionAdvice: response.text });
         } catch (e) {
             alert('Composition advice generation failed');
