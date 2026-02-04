@@ -24,6 +24,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
     if (!cleanKey) return;
 
     // 1. Client-side Validation: Check for non-ASCII characters
+    // Fixes "Failed to execute 'append' on 'Headers': String contains non ISO-8859-1 code point."
     if (/[^\x00-\x7F]/.test(cleanKey)) {
         setStatus('ERROR');
         setErrorMessage('❌ API 키 형식 오류: 한글이나 특수문자가 포함되어 있습니다. 영문/숫자 키를 정확히 복사했는지 확인하세요.');
@@ -39,48 +40,36 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       const tempAi = new GoogleGenAI({ apiKey: cleanKey });
       
       // 2. Text & Reasoning Check (Essential)
-      // Strategy: 3-Layer Fallback (3.0 Preview -> 2.0 Flash -> 1.5 Flash)
-      // gemini-1.5-flash is the most stable GA model for free tier on Vercel/Cloud.
+      // Strategy: Try gemini-3-flash-preview (Recommended) -> gemini-2.0-flash-exp (Fallback)
       let textStatus = 'ERROR';
       try {
-          // Attempt 1: Newest
           await tempAi.models.generateContent({
               model: 'gemini-3-flash-preview',
               contents: { parts: [{ text: 'Test connection' }] },
           });
           textStatus = 'SUCCESS';
-      } catch (e1) {
-          console.warn("gemini-3-flash-preview failed, trying fallback 1 (2.0)...", e1);
+      } catch (e) {
+          console.warn("gemini-3-flash-preview failed, trying fallback...", e);
           try {
-              // Attempt 2: 2.0 Flash (Stable/Preview)
+              // Fallback to experimental 2.0 if 3.0 fails
               await tempAi.models.generateContent({
-                  model: 'gemini-2.0-flash', 
+                  model: 'gemini-2.0-flash-exp', 
                   contents: { parts: [{ text: 'Test connection' }] },
               });
               textStatus = 'SUCCESS';
-          } catch (e2) {
-              console.warn("gemini-2.0-flash failed, trying fallback 2 (1.5)...", e2);
-              try {
-                  // Attempt 3: 1.5 Flash (Most Reliable GA)
-                   await tempAi.models.generateContent({
-                      model: 'gemini-1.5-flash', 
-                      contents: { parts: [{ text: 'Test connection' }] },
-                  });
-                  textStatus = 'SUCCESS';
-              } catch (e3: any) {
-                  console.error("All text models failed:", e3);
-                  textStatus = 'ERROR';
-                  
-                  // Enhanced Error Handling
-                  const errStr = JSON.stringify(e3) + (e3?.message || '');
-                  
-                  if (errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota')) {
-                      setErrorMessage('⚠️ 할당량 초과 (429): 무료 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
-                  } else if (errStr.includes('API_KEY_INVALID') || errStr.includes('400') || errStr.includes('403')) {
-                      setErrorMessage('❌ 권한 거부 (403/400): API 키가 잘못되었거나, Google AI Studio에서 "HTTP Referrer" 제한이 설정되어 있을 수 있습니다. 제한을 해제하거나 현재 도메인을 추가하세요.');
-                  } else {
-                      setErrorMessage(`API 연결 실패: ${e3.message || '알 수 없는 오류'}`);
-                  }
+          } catch (e2: any) {
+              console.error("Text Check Failed completely:", e2);
+              textStatus = 'ERROR';
+              
+              // Enhanced Error Handling for 429/Quota and other specific errors
+              const errStr = JSON.stringify(e2) + (e2?.message || '');
+              
+              if (errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota')) {
+                  setErrorMessage('⚠️ 할당량 초과 (429): 무료 사용량을 초과했습니다. 잠시 후 다시 시도하거나 다른 키를 사용하세요.');
+              } else if (errStr.includes('API_KEY_INVALID') || errStr.includes('400')) {
+                  setErrorMessage('❌ 유효하지 않은 API 키입니다.');
+              } else {
+                  setErrorMessage('API 연결에 실패했습니다. 키를 확인해주세요.');
               }
           }
       }
@@ -96,9 +85,8 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       });
       
       // 4. Pro Model Check (Paid Tier or High Quota)
-      // gemini-3-pro-preview
       const checkPro = tempAi.models.generateContent({
-          model: 'gemini-3-pro-preview',
+          model: 'gemini-3-pro-image-preview',
           contents: { parts: [{ text: 'Test pro' }] },
       }).then(() => 'SUCCESS').catch((e) => {
           console.warn("Pro Check Failed:", e);
@@ -203,7 +191,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
                 <div style={{ marginTop: '5px', marginBottom: '5px' }}>
                     <StatusRow label="기본 텍스트/추론 (Text & Reasoning)" status={caps.text} />
                     <StatusRow label="일반 이미지 생성 (Image Gen)" status={caps.image} />
-                    <StatusRow label="Pro 모델 (Thinking & HQ Image)" status={caps.pro} />
+                    <StatusRow label="Pro 고해상도 이미지 (Pro Image)" status={caps.pro} />
                 </div>
             )}
 
@@ -230,7 +218,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
 
             {status === 'ERROR' && errorMessage && (
                 <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
-                    <p style={{ color: '#ef4444', fontSize: '13px', margin: 0, fontWeight: 'bold', textAlign: 'left', lineHeight: '1.4' }}>
+                    <p style={{ color: '#ef4444', fontSize: '13px', margin: 0, fontWeight: 'bold' }}>
                         {errorMessage}
                     </p>
                 </div>

@@ -9,29 +9,17 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
   const [loadingTitles, setLoadingTitles] = useState(false);
   const [loadingReferences, setLoadingReferences] = useState(false);
   
+  // Model Selection Logic
+  // Stable: gemini-3-flash-preview (Recommended for basic text)
+  // Pro: gemini-3-pro-preview (Recommended for complex reasoning)
+  const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
+  
   // Use persistent project data for theme packs
   const themePacks = project.generatedThemePacks || [];
+  
   const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
   const [referenceSuggestions, setReferenceSuggestions] = useState<ReferenceSuggestion[]>([]);
   const [ideaKeywords, setIdeaKeywords] = useState('');
-
-  const generateWithFallback = async (primaryModel: string, prompt: string, config: any) => {
-      const genAI = getGenAI();
-      try {
-          return await genAI.models.generateContent({ model: primaryModel, contents: prompt, config });
-      } catch (e1) {
-          console.warn(`${primaryModel} failed. Trying 2.0...`, e1);
-          if (modelTier === 'stable') { // Only fallback for stable tier, Pro users expect pro model
-              try {
-                  return await genAI.models.generateContent({ model: 'gemini-2.0-flash', contents: prompt, config });
-              } catch (e2) {
-                  console.warn(`2.0 failed. Trying 1.5...`, e2);
-                  return await genAI.models.generateContent({ model: 'gemini-1.5-flash', contents: prompt, config });
-              }
-          }
-          throw e1;
-      }
-  };
 
   const generateThemePacks = async () => {
     setLoadingPacks(true);
@@ -53,31 +41,32 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
         - Use Korean for "topic" and "style".
         `;
 
-        const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
-        const config = {
-            responseMimeType: 'application/json',
-            responseSchema: {
-                type: Type.ARRAY,
-                items: {
-                    type: Type.OBJECT,
-                    properties: {
-                        title: { type: Type.STRING },
-                        topic: { type: Type.STRING },
-                        style: { type: Type.STRING }
-                    },
-                    required: ['title', 'topic', 'style']
+        const response: any = await getGenAI().models.generateContent({
+            model: modelName,
+            contents: prompt,
+            config: {
+                responseMimeType: 'application/json',
+                responseSchema: {
+                    type: Type.ARRAY,
+                    items: {
+                        type: Type.OBJECT,
+                        properties: {
+                            title: { type: Type.STRING },
+                            topic: { type: Type.STRING },
+                            style: { type: Type.STRING }
+                        },
+                        required: ['title', 'topic', 'style']
+                    }
                 }
             }
-        };
+        });
 
-        const response: any = await generateWithFallback(modelName, prompt, config);
         const data = JSON.parse(response.text || '[]');
+        // Save to project state to persist across tabs
         onUpdate({ generatedThemePacks: data });
-    } catch (e: any) {
+    } catch (e) {
         console.error(e);
-        let msg = `아이디어 팩 생성 오류: ${modelTier} 모드`;
-        if (e.message?.includes('429')) msg += ' (무료 사용량 초과)';
-        alert(msg);
+        alert(`아이디어 팩 생성 오류: ${modelTier} 모드`);
     }
     setLoadingPacks(false);
   };
@@ -98,16 +87,18 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
           - Example: "Midnight Love (한밤의 사랑)", "Blue Sky (푸른 하늘)"
           - Do not include any other text or markdown.`;
 
-          const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
-          const config = {
-              responseMimeType: 'application/json',
-              responseSchema: {
-                  type: Type.ARRAY,
-                  items: { type: Type.STRING }
+          const response: any = await getGenAI().models.generateContent({
+              model: modelName,
+              contents: prompt,
+              config: {
+                  responseMimeType: 'application/json',
+                  responseSchema: {
+                      type: Type.ARRAY,
+                      items: { type: Type.STRING }
+                  }
               }
-          };
+          });
 
-          const response: any = await generateWithFallback(modelName, prompt, config);
           const data = JSON.parse(response.text || '[]');
           setTitleSuggestions(data);
       } catch (e) {
@@ -125,23 +116,25 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
           Each object should have keys: "song" and "artist".
           Do not include markdown code blocks.`;
 
-          const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
-          const config = {
-              responseMimeType: 'application/json',
-              responseSchema: {
-                  type: Type.ARRAY,
-                  items: {
-                      type: Type.OBJECT,
-                      properties: {
-                          song: { type: Type.STRING },
-                          artist: { type: Type.STRING }
-                      },
-                      required: ['song', 'artist']
+          const response: any = await getGenAI().models.generateContent({
+              model: modelName,
+              contents: prompt,
+              config: {
+                  responseMimeType: 'application/json',
+                  responseSchema: {
+                      type: Type.ARRAY,
+                      items: {
+                          type: Type.OBJECT,
+                          properties: {
+                              song: { type: Type.STRING },
+                              artist: { type: Type.STRING }
+                          },
+                          required: ['song', 'artist']
+                      }
                   }
               }
-          };
+          });
 
-          const response: any = await generateWithFallback(modelName, prompt, config);
           const data = JSON.parse(response.text || '[]');
           setReferenceSuggestions(data);
       } catch (e) {
@@ -152,6 +145,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
   };
 
   const applyThemePack = (pack: ThemePack) => {
+      // Use the full title including Korean translation
       onUpdate({
           title: pack.title,
           concept: pack.topic,
@@ -160,6 +154,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
   };
 
   const applySuggestedTitle = (fullTitle: string) => {
+      // Use the full title including Korean translation
       onUpdate({ title: fullTitle });
   };
 
@@ -190,8 +185,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
              Model: {modelTier === 'pro' ? 'Gemini 3.0 Pro' : 'Gemini 3.0 Flash'}
         </span>
       </h2>
-      {/* ... Rest of UI ... */}
-      
+
       {/* AI Theme Pack Suggestion Section */}
       <div style={{ marginBottom: '40px', padding: '20px', backgroundColor: '#111827', borderRadius: '12px', border: '1px solid #e11d48' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px', flexWrap: 'wrap', gap: '15px' }}>
