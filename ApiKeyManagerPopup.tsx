@@ -40,7 +40,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       const tempAi = new GoogleGenAI({ apiKey: cleanKey });
       
       // 2. Text & Reasoning Check (Essential)
-      // Strategy: Try gemini-3-flash-preview (Recommended) -> gemini-2.0-flash-exp (Fallback)
+      // Strategy: Try gemini-3-flash-preview (Recommended) -> gemini-2.0-flash (Fallback for Free Tier Reliability)
       let textStatus = 'ERROR';
       try {
           await tempAi.models.generateContent({
@@ -51,9 +51,9 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       } catch (e) {
           console.warn("gemini-3-flash-preview failed, trying fallback...", e);
           try {
-              // Fallback to experimental 2.0 if 3.0 fails
+              // Fallback to stable 2.0 flash which is very reliable for free tier
               await tempAi.models.generateContent({
-                  model: 'gemini-2.0-flash-exp', 
+                  model: 'gemini-2.0-flash', 
                   contents: { parts: [{ text: 'Test connection' }] },
               });
               textStatus = 'SUCCESS';
@@ -85,8 +85,10 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
       });
       
       // 4. Pro Model Check (Paid Tier or High Quota)
+      // gemini-3-pro-preview (or gemini-3-pro-image-preview)
+      // Using gemini-3-pro-preview for logic capability check of Pro tier
       const checkPro = tempAi.models.generateContent({
-          model: 'gemini-3-pro-image-preview',
+          model: 'gemini-3-pro-preview',
           contents: { parts: [{ text: 'Test pro' }] },
       }).then(() => 'SUCCESS').catch((e) => {
           console.warn("Pro Check Failed:", e);
@@ -191,7 +193,7 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
                 <div style={{ marginTop: '5px', marginBottom: '5px' }}>
                     <StatusRow label="기본 텍스트/추론 (Text & Reasoning)" status={caps.text} />
                     <StatusRow label="일반 이미지 생성 (Image Gen)" status={caps.image} />
-                    <StatusRow label="Pro 고해상도 이미지 (Pro Image)" status={caps.pro} />
+                    <StatusRow label="Pro 모델 (Thinking & HQ Image)" status={caps.pro} />
                 </div>
             )}
 
