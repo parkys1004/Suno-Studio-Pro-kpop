@@ -44,56 +44,53 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
               Schema: [{ title: string, rationale: string, lyrics: string }]
             `;
   
-            // Model Selection with Fallback
+            // Model Selection with 3-Layer Fallback
             const primaryModel = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
-            let response: any;
+            const genAI = getGenAI();
+            const config = {
+                responseMimeType: 'application/json',
+                responseSchema: {
+                    type: Type.ARRAY,
+                    items: {
+                        type: Type.OBJECT,
+                        properties: {
+                            title: { type: Type.STRING },
+                            rationale: { type: Type.STRING },
+                            lyrics: { type: Type.STRING }
+                        },
+                        required: ['title', 'rationale', 'lyrics']
+                    }
+                }
+            };
 
+            let response: any;
             try {
-                response = await getGenAI().models.generateContent({
+                response = await genAI.models.generateContent({
                     model: primaryModel,
                     contents: prompt,
-                    config: {
-                        responseMimeType: 'application/json',
-                        responseSchema: {
-                            type: Type.ARRAY,
-                            items: {
-                                type: Type.OBJECT,
-                                properties: {
-                                    title: { type: Type.STRING },
-                                    rationale: { type: Type.STRING },
-                                    lyrics: { type: Type.STRING }
-                                },
-                                required: ['title', 'rationale', 'lyrics']
-                            }
-                        }
-                    }
+                    config: config
                 });
             } catch (firstError) {
                 console.warn(`Variation gen failed on ${primaryModel}, trying fallback...`, firstError);
-                // Fallback to gemini-2.0-flash if Stable mode fails
+                // Fallback to gemini-2.0-flash -> 1.5-flash if Stable mode fails
                 if (modelTier === 'stable') {
                     try {
-                        response = await getGenAI().models.generateContent({
+                        response = await genAI.models.generateContent({
                             model: 'gemini-2.0-flash',
                             contents: prompt,
-                            config: {
-                                responseMimeType: 'application/json',
-                                responseSchema: {
-                                    type: Type.ARRAY,
-                                    items: {
-                                        type: Type.OBJECT,
-                                        properties: {
-                                            title: { type: Type.STRING },
-                                            rationale: { type: Type.STRING },
-                                            lyrics: { type: Type.STRING }
-                                        },
-                                        required: ['title', 'rationale', 'lyrics']
-                                    }
-                                }
-                            }
+                            config: config
                         });
                     } catch (secondError) {
-                        throw secondError;
+                        console.warn('2.0 failed, trying 1.5...', secondError);
+                        try {
+                            response = await genAI.models.generateContent({
+                                model: 'gemini-1.5-flash',
+                                contents: prompt,
+                                config: config
+                            });
+                        } catch (thirdError) {
+                             throw thirdError;
+                        }
                     }
                 } else {
                     throw firstError;
@@ -144,7 +141,7 @@ const LyricsVariationsPanel = ({ project, onUpdate, legibilityMode, modelTier }:
                    {loadingVariations ? '아이디어 구상 중...' : <><span className="material-symbols-outlined" style={{ fontSize: '18px' }}>auto_awesome</span> 5가지 버전 생성하기</>}
                 </button>
             </div>
-
+            {/* List ... */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {variations.length > 0 ? variations.map((v: any, i: number) => {
                     const isApplied = selectedVariationIndex === i;
