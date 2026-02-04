@@ -105,8 +105,8 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
 
         // Model Selection Logic for Lyrics
         // Pro Mode: gemini-3-pro-preview with Thinking Config for deeper reasoning
-        // Stable Mode: gemini-2.0-flash
-        const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-2.0-flash';
+        // Stable Mode: gemini-2.0-flash-exp (more widely available for free tier)
+        const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-2.0-flash-exp';
         const config: any = {};
         
         if (modelTier === 'pro') {
@@ -152,7 +152,7 @@ const LyricsTab = ({ project, onUpdate, legibilityMode, modelTier }: { project: 
         `;
         
         const response: any = await getGenAI().models.generateContent({
-            model: 'gemini-2.0-flash',
+            model: 'gemini-2.0-flash-exp',
             contents: prompt,
             config: {
                 responseMimeType: 'application/json',

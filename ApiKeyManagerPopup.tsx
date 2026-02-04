@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { encryptKey } from './utils';
@@ -20,50 +19,81 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
   }, []);
 
   const testConnection = async (targetKey: string) => {
+    const cleanKey = targetKey.trim(); // Remove whitespace
+    if (!cleanKey) return;
+
     setStatus('TESTING');
     setCaps({ text: 'CHECKING', image: 'CHECKING', pro: 'CHECKING' });
     
     try {
-      const tempAi = new GoogleGenAI({ apiKey: targetKey });
+      const tempAi = new GoogleGenAI({ apiKey: cleanKey });
       
-      // Define checks for 3 core models
-      // Changed to gemini-2.0-flash for better free tier compatibility
-      const checkText = tempAi.models.generateContent({
-          model: 'gemini-2.0-flash',
-          contents: 'hi',
-      }).then(() => 'SUCCESS').catch(() => 'ERROR');
+      // 1. Text & Reasoning Check (Essential)
+      // Try gemini-2.0-flash-exp first as it's widely available on free tier
+      let textStatus = 'ERROR';
+      try {
+          await tempAi.models.generateContent({
+              model: 'gemini-2.0-flash-exp',
+              contents: { parts: [{ text: 'Test connection' }] },
+          });
+          textStatus = 'SUCCESS';
+      } catch (e) {
+          console.warn("gemini-2.0-flash-exp failed, trying fallback...", e);
+          try {
+              // Fallback to latest flash alias if specific model fails
+              await tempAi.models.generateContent({
+                  model: 'gemini-2.0-flash', 
+                  contents: { parts: [{ text: 'Test connection' }] },
+              });
+              textStatus = 'SUCCESS';
+          } catch (e2) {
+              console.error("Text Check Failed completely:", e2);
+              textStatus = 'ERROR';
+          }
+      }
 
+      // 2. Image Generation Check
+      // gemini-2.5-flash-image is the standard image gen model
       const checkImage = tempAi.models.generateContent({
           model: 'gemini-2.5-flash-image',
-          contents: 'a dot',
-      }).then(() => 'SUCCESS').catch(() => 'ERROR');
+          contents: { parts: [{ text: 'A drawing of a cat' }] },
+      }).then(() => 'SUCCESS').catch((e) => {
+          console.warn("Image Check Failed:", e);
+          return 'ERROR';
+      });
       
+      // 3. Pro Model Check (Paid Tier)
       const checkPro = tempAi.models.generateContent({
           model: 'gemini-3-pro-image-preview',
-          contents: 'a dot',
-      }).then(() => 'SUCCESS').catch(() => 'ERROR');
+          contents: { parts: [{ text: 'Test pro' }] },
+      }).then(() => 'SUCCESS').catch((e) => {
+          console.warn("Pro Check Failed:", e);
+          return 'ERROR';
+      });
 
-      // Execute in parallel
-      const [textRes, imageRes, proRes] = await Promise.all([checkText, checkImage, checkPro]);
+      // Execute parallel checks
+      const imageRes = await checkImage;
+      const proRes = await checkPro;
       
-      setCaps({ text: textRes as any, image: imageRes as any, pro: proRes as any });
+      setCaps({ text: textStatus as any, image: imageRes as any, pro: proRes as any });
 
-      if (textRes === 'SUCCESS') {
+      if (textStatus === 'SUCCESS') {
           // At least text works, save key
-          localStorage.setItem('suno_pro_api_key', encryptKey(targetKey));
+          localStorage.setItem('suno_pro_api_key', encryptKey(cleanKey));
           setSavedKeyExists(true);
           
           if (imageRes === 'SUCCESS' && proRes === 'SUCCESS') {
               setStatus('SUCCESS');
               setTimeout(() => onOpenApp(), 1200);
           } else {
+              // Even if image/pro fails, we allow entry as PARTIAL_SUCCESS if text works
               setStatus('PARTIAL_SUCCESS');
           }
       } else {
           setStatus('ERROR');
       }
     } catch (e) {
-      console.error(e);
+      console.error("Connection Test Fatal Error:", e);
       setStatus('ERROR');
       setCaps({ text: 'ERROR', image: 'ERROR', pro: 'ERROR' });
     }
@@ -149,13 +179,13 @@ const ApiKeyManagerPopup = ({ onOpenApp }: { onOpenApp: () => void }) => {
             >
               {status === 'TESTING' ? '기능 테스트 중...' : 
                status === 'SUCCESS' ? '모든 기능 연결 성공!' : 
-               status === 'PARTIAL_SUCCESS' ? '일부 기능 제한됨 (앱 시작)' : 
+               status === 'PARTIAL_SUCCESS' ? '제한된 기능으로 연결됨' : 
                '연결 및 저장'}
             </button>
             
             {status === 'PARTIAL_SUCCESS' && (
                 <button onClick={onOpenApp} style={{ padding: '12px', backgroundColor: '#374151', color: 'white', border: '1px solid #6b7280', borderRadius: '8px', cursor: 'pointer' }}>
-                    제한된 기능으로 시작하기
+                    제한된 기능으로 시작하기 (앱 진입)
                 </button>
             )}
 

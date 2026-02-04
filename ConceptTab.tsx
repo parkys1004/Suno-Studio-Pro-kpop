@@ -10,7 +10,7 @@ const ConceptTab = ({ project, onUpdate, legibilityMode, modelTier }: { project:
   const [loadingReferences, setLoadingReferences] = useState(false);
   
   // Model Selection Logic
-  const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash';
+  const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash-exp';
   
   // Use persistent project data for theme packs
   const themePacks = project.generatedThemePacks || [];

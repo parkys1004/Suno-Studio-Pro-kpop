@@ -85,7 +85,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
     const generatePrompt = async () => {
         setLoading(true);
         try {
-            const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash';
+            const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash-exp';
             let danceInstruction = '';
             if (useStrictDanceMode) {
                  danceInstruction = `
@@ -182,7 +182,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
     const generateCompositionAdvice = async () => {
         setLoadingAdvice(true);
         try {
-            const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash';
+            const modelName = modelTier === 'pro' ? 'gemini-3-flash-preview' : 'gemini-2.0-flash-exp';
             const prompt = `
               Provide professional AI music composition suggestions for a ${project.genre} (${project.subGenre}) song.
               Mood: ${project.mood}. 
