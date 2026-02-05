@@ -9,6 +9,7 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
   const selectedTemplate = project.selectedStructureTemplate || 'Custom';
   const [savedDjNames, setSavedDjNames] = useState<string[]>([]);
   const [showManual, setShowManual] = useState(false); // Manual Modal State
+  const [tooltip, setTooltip] = useState<{text: string, x: number, y: number} | null>(null); // New Tooltip State
 
   useEffect(() => {
     const saved = localStorage.getItem('suno_dj_names');
@@ -90,10 +91,77 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
     }
   };
 
+  // Tooltip Handlers
+  const handleMouseEnter = (e: React.MouseEvent, type: string) => {
+    const descriptions: Record<string, string> = {
+        'Intro': '곡의 도입부입니다. 분위기를 조성하거나 시그니처 사운드를 배치합니다.',
+        'Verse': '이야기를 풀어가는 절(Verse)입니다. 랩이나 보컬로 서사를 전달합니다.',
+        'Chorus': '곡의 핵심이 되는 후렴구(Hook)입니다. 가장 기억에 남는 멜로디를 배치하세요.',
+        'Bridge': '분위기를 반전시키거나 고조시키는 연결 구간입니다. (보통 2절 후 배치)',
+        'Drop': '강렬한 비트와 퍼포먼스가 강조되는 구간입니다. (댄스 브레이크/EDM)',
+        'Instrumental': '보컬 없이 악기 연주(솔로 등)가 중심이 되는 간주입니다.',
+        'Outro': '곡을 마무리하는 엔딩 구간입니다. 페이드 아웃이나 엔딩 포즈를 유도합니다.'
+    };
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltip({
+        text: descriptions[type] || type,
+        x: rect.left + rect.width / 2,
+        y: rect.top - 8
+    });
+  };
+
+  const handleMouseLeave = () => setTooltip(null);
+
   const titleColor = legibilityMode ? '#FFFFFF' : 'white';
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', width: '100%' }}>
+        {/* Tooltip Renderer */}
+        {tooltip && (
+            <div style={{
+                position: 'fixed',
+                left: tooltip.x,
+                top: tooltip.y,
+                transform: 'translate(-50%, -100%)',
+                backgroundColor: '#111827',
+                color: '#fbbf24',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontWeight: '500',
+                pointerEvents: 'none',
+                zIndex: 9999,
+                border: '1px solid #4b5563',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
+            }}>
+                {tooltip.text}
+                <div style={{
+                    position: 'absolute',
+                    bottom: '-5px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0, 
+                    height: 0, 
+                    borderLeft: '5px solid transparent',
+                    borderRight: '5px solid transparent',
+                    borderTop: '5px solid #4b5563'
+                }}></div>
+                <div style={{
+                    position: 'absolute',
+                    bottom: '-4px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0, 
+                    height: 0, 
+                    borderLeft: '5px solid transparent',
+                    borderRight: '5px solid transparent',
+                    borderTop: '5px solid #111827'
+                }}></div>
+            </div>
+        )}
+
         <h2 style={{ borderBottom: '1px solid #374151', paddingBottom: '15px', marginBottom: '20px', color: titleColor, fontWeight: legibilityMode ? 'bold' : 'normal', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span>🎹 곡 구조 설계 (Structure Editor)</span>
             <button 
@@ -160,6 +228,8 @@ const StructureTab = ({ project, onUpdate, legibilityMode }: { project: Project,
                 <button 
                     key={type} 
                     onClick={() => addBlock(type)}
+                    onMouseEnter={(e) => handleMouseEnter(e, type)}
+                    onMouseLeave={handleMouseLeave}
                     style={{ padding: '8px 16px', backgroundColor: '#374151', border: 'none', borderRadius: '20px', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}
                 >
                     + {type}
