@@ -304,7 +304,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
                     value={localPrompt}
                     onChange={e => setLocalPrompt(e.target.value)}
                     placeholder="Suno.ai 프롬프트가 여기에 생성됩니다."
-                    style={{ width: '100%', padding: '15px', borderRadius: '8px', backgroundColor: '#111827', border: '1px solid #374151', color: '#fbbf24', resize: 'none', fontFamily: 'monospace', minHeight: '120px', boxSizing: 'border-box' }}
+                    style={{ width: '100%', padding: '15px', borderRadius: '8px', backgroundColor: '#111827', border: '1px solid #374151', color: '#fbbf24', resize: 'none', fontFamily: 'monospace', minHeight: '240px', boxSizing: 'border-box' }}
                 />
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
                      <span style={{ fontSize: '11px', color: '#6b7280' }}>
