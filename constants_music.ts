@@ -1,4 +1,5 @@
 
+
 export const GENRES = [
   { label: 'K-Pop', subgenres: ['Girl Crush', 'Refreshing', 'High Teen', 'Dark Concept', 'Jersey Club', 'Easy Listening', 'Afrobeats'] },
   { label: 'Ballad', subgenres: ['Traditional Ballad', 'Rock Ballad', 'R&B Ballad', 'Indie Ballad'] },
@@ -42,6 +43,26 @@ export const INSTRUMENTS = [
   'Gayageum (Zither)', 'Haegeum (Fiddle)', 'Janggu (Drum)', 'Kwaenggwari (Gong)', 'Daeguem (Flute)', 'Piri',
   'Backing Vocals', 'Whistle', 'FX'
 ];
+
+export const VOCAL_STYLES: Record<string, string[]> = {
+  'Male': [
+    'Soulful (소울풀)', 'Baritone (중저음)', 'Tenor (고음/테너)', 'Gritty (거친)',
+    'Raspy (허스키)', 'Falsetto (가성)', 'Aggressive (공격적)', 'Soft (부드러운)',
+    'Spoken (말하듯이)', 'Rap (랩)', 'Auto-tuned (오토튠)', 'Robotic (로봇)'
+  ],
+  'Female': [
+    'Soulful (소울풀)', 'Soprano (고음/소프라노)', 'Alto (중저음)', 'Airy (공기반)',
+    'Husky (허스키)', 'Cute (귀여운)', 'Power (파워풀)', 'Soft (부드러운)',
+    'Spoken (말하듯이)', 'Rap (랩)', 'Auto-tuned (오토튠)', 'Robotic (로봇)'
+  ],
+  'Duet': [
+    'Romantic (로맨틱)', 'Harmony (화음)', 'Battle (배틀)', 'Acoustic (어쿠스틱)', 'Ballad (발라드)', 'Pop (팝)'
+  ],
+  'Choir': [
+    'Gospel (가스펠)', 'Classical (클래식)', 'Pop Chorus (팝 코러스)', 'Children (어린이)', 'Dark/Ominous (웅장/다크)'
+  ],
+  'Instrumental': []
+};
 
 export const GENRE_DEFAULTS: Record<string, string[]> = {
   'K-Pop': ['Synthesizer', 'Bass', 'Electronic Drums', 'Vocals', 'Backing Vocals', 'FX'],

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Project } from './types';
-import { GENRE_PRESETS } from './constants';
+import { GENRE_PRESETS, VOCAL_STYLES } from './constants';
 import { getGenAI } from './utils';
 
 interface SoundConfigPanelProps {
@@ -197,8 +197,12 @@ const SoundConfigPanel = ({ project, onUpdate, modelTier, titleColor, labelColor
                     <label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', color: labelColor }}>보컬 타입 (Vocal Type)</label>
                     <select 
                         value={project.vocalType || ''} 
-                        onChange={e => onUpdate({ vocalType: e.target.value })}
-                        style={{ width: '100%', padding: '10px', backgroundColor: '#111827', border: '1px solid #4b5563', color: 'white', borderRadius: '4px' }}
+                        onChange={e => {
+                            const newType = e.target.value;
+                            // Reset style if type changes as lists might differ
+                            onUpdate({ vocalType: newType, vocalStyle: undefined });
+                        }}
+                        style={{ width: '100%', padding: '10px', backgroundColor: '#111827', border: '1px solid #4b5563', color: 'white', borderRadius: '4px', marginBottom: '15px' }}
                     >
                         <option value="Male">Male (남성)</option>
                         <option value="Female">Female (여성)</option>
@@ -206,6 +210,36 @@ const SoundConfigPanel = ({ project, onUpdate, modelTier, titleColor, labelColor
                         <option value="Choir">Choir (합창)</option>
                         <option value="Instrumental">Instrumental (연주곡)</option>
                     </select>
+
+                    {project.vocalType && VOCAL_STYLES[project.vocalType]?.length > 0 && (
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', color: labelColor }}>보컬 스타일 (Vocal Style)</label>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                {VOCAL_STYLES[project.vocalType].map((style, idx) => {
+                                    const isSelected = project.vocalStyle === style;
+                                    return (
+                                        <button
+                                            key={idx}
+                                            onClick={() => onUpdate({ vocalStyle: isSelected ? undefined : style })}
+                                            style={{
+                                                padding: '6px 14px',
+                                                fontSize: '12px',
+                                                borderRadius: '20px',
+                                                border: isSelected ? '1px solid #3b82f6' : '1px solid #4b5563',
+                                                backgroundColor: isSelected ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
+                                                color: isSelected ? '#60a5fa' : (legibilityMode ? '#E5E7EB' : '#9ca3af'),
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s',
+                                                fontWeight: isSelected ? 'bold' : 'normal'
+                                            }}
+                                        >
+                                            {style}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -90,12 +90,20 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
             // Pro: gemini-3-pro-preview (Recommended for complex reasoning)
             const modelName = modelTier === 'pro' ? 'gemini-3-pro-preview' : 'gemini-3-flash-preview';
             
+            // --- Analysis & Data Cleaning ---
+            // 1. Clean Vocal Style: Remove Korean descriptions (e.g., "Soulful (소울풀)" -> "Soulful")
+            const cleanVocalStyle = project.vocalStyle ? project.vocalStyle.split('(')[0].trim() : 'Standard';
+            
+            // 2. Handle BPM & Key safely
+            const bpmInstruction = project.bpm && project.bpm > 0 ? `${project.bpm} BPM` : 'Tempo suitable for the genre';
+            const keyInstruction = project.key ? `Key: ${project.key}` : 'Key: Any suitable key';
+
             let danceInstruction = '';
             if (useStrictDanceMode) {
                  danceInstruction = `
                  STRICT DANCE MODE:
                  - The beat MUST be constant and steady (Metronomic).
-                 - Emphasis on the "1" count.
+                 - Emphasis on the "1" count (Strong Downbeat).
                  - Clear percussion suitable for K-Pop choreography.
                  `;
             }
@@ -127,10 +135,10 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
                 STRICT REQUIREMENT: Generate the prompt adhering to the following 5-step structure logic (output as a single cohesive paragraph).
                 
                 Structure Steps:
-                1. Identity: Define vocalist gender (based on Vocal Type) and genre in exactly one sentence.
-                2. Mood: Specify tempo (${project.bpm} BPM), emotional mood, and key (${project.key}).
+                1. Identity: Define vocalist gender (based on Vocal Type), vocal style, and genre in exactly one sentence.
+                2. Mood: Specify tempo (${bpmInstruction}), emotional mood, and key (${keyInstruction}).
                 3. Instruments: List instruments (${(project.instruments || []).join(', ')}) using playing verbs (e.g., plays, provides, supports, riffs) instead of just nouns.
-                4. Performance: Describe vocal texture, delivery style, register/range, and phrasing.
+                4. Performance: Describe vocal texture (${cleanVocalStyle}), delivery style, register/range, and phrasing.
                 5. Production: Describe the acoustic space, reverb amount, mix placement, and sonic characteristics (e.g., saturation, lofi, clean).
                 
                 Example of desired style: "A male K-pop singer performs an energetic track. The tempo is fast at 130 BPM in F# minor. Distorted synthesizers riff aggressively while a heavy 808 bass supports the rhythm. The vocals are powerful and breathy with tight phrasing. The production is clean with wide stereo width and modern saturation."
@@ -140,7 +148,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
                 structureInstruction = `
                 Requirement:
                 - Create a high-quality comma-separated list of tags and style descriptors.
-                - Include genre, mood, key instruments, vocal type, and production style.
+                - Include genre, mood, key instruments, vocal type, vocal style (${cleanVocalStyle}), and production style.
                 - Add style adjectives (e.g., 'atmospheric', 'heavy', 'uplifting').
                 - Format: "[Tag 1], [Tag 2], [Tag 3], ..."
                 - Limit to around 200 characters max.
@@ -159,8 +167,9 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
               - Style: ${project.styleDescription}
               - Instruments: ${(project.instruments || []).join(', ')}
               - Vocal Type: ${project.vocalType}
-              - BPM: ${project.bpm}
-              - Key: ${project.key}
+              - Vocal Style: ${cleanVocalStyle}
+              - BPM: ${bpmInstruction}
+              - Key: ${keyInstruction}
               
               ${referenceInstruction}
               ${danceInstruction}
@@ -278,7 +287,7 @@ const SoundGeneratorPanel = ({ project, onUpdate, legibilityMode, modelTier, use
                         <strong style={{ display: 'block', marginBottom: '4px' }}>ℹ️ 5단계 생성 정보 (Data Sources):</strong>
                         <ul style={{ margin: 0, paddingLeft: '15px', lineHeight: '1.5' }}>
                             <li><strong>1. Identity:</strong> 장르 ({project.genre}) + 보컬 타입 ({project.vocalType})</li>
-                            <li><strong>2. Mood:</strong> 분위기 ({project.mood}) + BPM ({project.bpm}) + Key ({project.key})</li>
+                            <li><strong>2. Mood:</strong> 분위기 ({project.mood}) + BPM ({project.bpm > 0 ? project.bpm : 'Auto'}) + Key ({project.key || 'Auto'})</li>
                             <li><strong>3. Instruments:</strong> 선택된 악기 ({project.instruments ? project.instruments.length : 0}개)</li>
                             <li><strong>4. Performance:</strong> 스타일 설명 (Style Description)</li>
                             <li><strong>5. Production:</strong> 음향 공간감 및 믹싱 스타일</li>

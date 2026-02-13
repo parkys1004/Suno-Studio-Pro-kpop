@@ -65,6 +65,7 @@ export interface Project {
   // Settings
   instruments: string[];
   vocalType: string;
+  vocalStyle?: string; // NEW: Vocal Style
   djName?: string;
   introStyle?: string;
   selectedSoundPreset?: string; // Persist Sound Preset Selection
